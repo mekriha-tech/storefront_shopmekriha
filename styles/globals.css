@@ -73,4 +73,19 @@ body {
   transform-origin: center;
 }
 
+/* Slow drift for the river clouds (components/ScrollRiver.js) */
+@keyframes cloudDrift {
+  0%, 100% {
+    transform: translate(0px, 0px);
+  }
+  50% {
+    transform: translate(22px, -8px);
+  }
+}
+
+.river-cloud-drift {
+  animation: cloudDrift 14s ease-in-out infinite;
+  transform-origin: center;
+}
+
 

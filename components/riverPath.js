@@ -39,6 +39,39 @@ export function pointsToSmoothPath(points) {
 }
 
 /**
+ * Offset each point perpendicular to the local tangent by `distance`
+ * (positive = left of travel direction, negative = right).
+ */
+export function offsetPoints(points, distance) {
+  const offset = [];
+  for (let i = 0; i < points.length; i++) {
+    const prev = points[i - 1] || points[i];
+    const next = points[i + 1] || points[i];
+    const dx = next.x - prev.x;
+    const dy = next.y - prev.y;
+    const len = Math.hypot(dx, dy) || 1;
+    const nx = -dy / len;
+    const ny = dx / len;
+    offset.push({ x: points[i].x + nx * distance, y: points[i].y + ny * distance });
+  }
+  return offset;
+}
+
+/**
+ * Build a closed, smoothed SVG path `d` string for a ribbon of the given
+ * `width` centered on `points` — used to render the river as a broad
+ * filled band instead of a thin stroked line.
+ */
+export function pointsToRibbonPath(points, width) {
+  if (points.length < 2) return "";
+  const half = width / 2;
+  const left = offsetPoints(points, half);
+  const right = offsetPoints(points, -half).reverse();
+  const ring = left.concat(right);
+  return `${pointsToSmoothPath(ring)} Z`;
+}
+
+/**
  * Split full-path points into one array per section, using ascending
  * section start-Y boundaries (boundaries[0] must be 0). Each segment
  * after the first is prefixed with the previous segment's last point
