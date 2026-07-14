@@ -101,10 +101,40 @@ export default function ScrollRiver({ sectionIds, children }) {
   }, [isDesktop, measure]);
 
   useEffect(() => {
-    if (!geometry || !geometry.points.length) return;
-    const first = geometry.points[0];
-    setBoat({ x: first.x, y: first.y, angle: 0 });
-  }, [geometry]);
+    if (!isDesktop || !geometry) return undefined;
+
+    let ticking = false;
+
+    const updateBoat = () => {
+      ticking = false;
+      const wrapper = wrapperRef.current;
+      const pathEl = svgPathRef.current;
+      if (!wrapper || !pathEl) return;
+
+      const rect = wrapper.getBoundingClientRect();
+      const viewportH = window.innerHeight;
+      const raw = (viewportH / 2 - rect.top) / geometry.height;
+      const progress = Math.min(1, Math.max(0, raw));
+
+      const totalLength = pathEl.getTotalLength();
+      const point = pathEl.getPointAtLength(progress * totalLength);
+      const ahead = pathEl.getPointAtLength(Math.min(totalLength, progress * totalLength + 1));
+      const angle = (Math.atan2(ahead.y - point.y, ahead.x - point.x) * 180) / Math.PI;
+
+      setBoat({ x: point.x, y: point.y, angle });
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(updateBoat);
+      }
+    };
+
+    updateBoat();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [isDesktop, geometry]);
 
   return (
     <div ref={wrapperRef} className="relative">
