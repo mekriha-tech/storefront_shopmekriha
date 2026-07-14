@@ -1,0 +1,120 @@
+{
+  "en": {
+    "nav": {
+      "home": "Home",
+      "about": "About Mekriha",
+      "produce": "Our Produce",
+      "visit": "Visit Farms"
+    },
+    "hero": {
+      "pill": "🌱 Farmer-First Marketplace",
+      "title": "Where Every Harvest Finds Its True Value",
+      "description": "Mekriha is a farmer-first marketplace built to reconnect people with the true source of their food. We believe every harvest represents months of dedication, care, and hard work — and that value should reach the farms that grow it.",
+      "btnKnowMore": "Know More",
+      "btnOurProduce": "Our Produce"
+    },
+    "section2": {
+      "pill": "🌾 Sustainable Partnerships",
+      "title": "Growing Stronger, Together",
+      "description": "We partner with organic farms, helping them establish a strong identity and lasting presence. From digital visibility to direct customer connections, we grow together.",
+      "partnerFarms": "Partner Farms",
+      "exploreAll": "Explore All"
+    },
+    "section3": {
+      "pill": "🔍 Traceability & Transparency",
+      "title": "Know Your Crop Journey",
+      "description": "Know where your crop was grown, how it was cultivated, and how it traveled from the field to your home. Mekriha brings complete transparency so every harvest has a story you can trust.",
+      "step1Title": "1. Sowing & Cultivation",
+      "step1Desc": "Heritage seeds sown in rich soils using organic compost.",
+      "step2Title": "2. Harvest at Peak",
+      "step2Desc": "Handpicked crop harvested at peak maturity by local farmers.",
+      "step3Title": "3. Quality Check",
+      "step3Desc": "Organic sorting and eco-friendly packaging at regional hubs.",
+      "step4Title": "4. Direct Delivery",
+      "step4Desc": "Fast transit from Assam's valleys straight to your home."
+    },
+    "section4": {
+      "pill": "🏡 Farm Experiences",
+      "title": "Visit the Farm",
+      "description": "Experience the farm beyond the marketplace. Visit our partner farms, meet the people behind your food, and create unforgettable memories.",
+      "cta": "Visit Farm Now"
+    },
+    "section5": {
+      "pill": "🛒 Organic Harvest",
+      "title": "Explore Our Produce",
+      "description": "Discover seasonal, farm-fresh produce from trusted partner farms. Every order supports fair trade and sustainable farming.",
+      "cta": "Explore Our Produce"
+    },
+    "footer": {
+      "brand": "Mekriha – Farmer First Marketplace",
+      "tagline": "From Rural Fields to Urban Homes — Fairly.",
+      "exploreTitle": "Explore",
+      "ourFarmsTitle": "Our Farms",
+      "learnTitle": "Learn",
+      "supportTitle": "Support",
+      "newsletterTitle": "Stay Close to the Harvest",
+      "newsletterPlaceholder": "Your email address",
+      "newsletterBtn": "Subscribe",
+      "bottom": "© 2026 Mekriha. All Rights Reserved. Supporting Farms. Connecting Communities. Growing Together."
+    }
+  },
+  "as": {
+    "nav": {
+      "home": "গৃহ",
+      "about": "মেক্ৰিহাৰ বিষয়ে",
+      "produce": "আমাৰ উৎপাদন",
+      "visit": "পাম ভ্ৰমণ"
+    },
+    "hero": {
+      "pill": "🌱 খেতিয়ক-প্ৰথম বজাৰ",
+      "title": "য'ত প্ৰতিটো চপোৱা শস্যই প্ৰকৃত মূল্য লাভ কৰে",
+      "description": "মেক্ৰিহা হৈছে এক খেতিয়ক-প্ৰথম বজাৰ যি মানুহক তেওঁলোকৰ খাদ্যৰ প্ৰকৃত উৎসৰ সৈতে পুনৰ সংযোগ কৰাৰ বাবে গঢ়ি তোলা হৈছে। আমি বিশ্বাস কৰোঁ যে প্ৰতিটো শস্যই মাহ মাহ ধৰি কৰা উৎসৰ্গা, যত্ন আৰু কঠোৰ পৰিশ্ৰমক প্ৰতিনিধিত্ব কৰে — আৰু সেই মূল্য ইয়াৰ উৎপাদক পামসমূহৰ ওচৰলৈ যাব লাগে।",
+      "btnKnowMore": "অধিক জানক",
+      "btnOurProduce": "আমাৰ শস্যসমূহ"
+    },
+    "section2": {
+      "pill": "🌾 বহনক্ষম অংশীদাৰিত্ব",
+      "title": "একেলগে শক্তিশালীভাৱে বৃদ্ধি পাইছোঁ",
+      "description": "আমি জৈৱিক পামসমূহৰ সৈতে অংশীদাৰিত্ব কৰোঁ, তেওঁলোকক এক শক্তিশালী পৰিচয় আৰু স্থায়ী স্থিতি স্থাপন কৰাত সহায় কৰোঁ। ডিজিটেল দৃশ্যমানতাৰ পৰা আৰম্ভ কৰি গ্ৰাহকৰ সৈতে পোনপটীয়া সংযোগলৈকে, আমি একেলগে বৃদ্ধি পাইছোঁ।",
+      "partnerFarms": "অংশীদাৰ পামসমূহ",
+      "exploreAll": "সকলো পাম"
+    },
+    "section3": {
+      "pill": "🔍 ট্ৰেচেবিলিটি আৰু স্বচ্ছতা",
+      "title": "আপোনাৰ শস্যৰ যাত্ৰা জানক",
+      "description": "আপোনাৰ শস্য ক’ত খেতি কৰা হৈছিল, কেনেকৈ উৎপাদন কৰা হৈছিল, আৰু পথাৰৰ পৰা আপোনাৰ ঘৰলৈ কেনেকৈ যাত্ৰা কৰিলে সেইটো জানক। মেক্ৰিহা সম্পূৰ্ণ স্বচ্ছতা প্ৰদান কৰে যাতে প্ৰতিটো চপোৱা শস্যৰ আঁৰত আপুনি বিশ্বাস কৰিব পৰা এটা কাহিনী থাকে।",
+      "step1Title": "১. ৰোপণ আৰু খেতি",
+      "step1Desc": "জৈৱিক সাৰ ব্যৱহাৰ কৰি সাৰুৱা মাটিত ঐতিহ্যবাহী বীজ সিঁচা হয়।",
+      "step2Title": "২. উপযুক্ত সময়ত চপোৱা",
+      "step2Desc": "স্থানীয় কৃষকসকলে উপযুক্ত পৈণত অৱস্থাত শস্যসমূহ হাতেৰে চপোৱা কৰে।",
+      "step3Title": "৩. গুণগত মান নিৰূপণ",
+      "step3Desc": "আঞ্চলিক কেন্দ্ৰসমূহত জৈৱিক শ্ৰেণীবিভাজন আৰু পৰিৱেশ-অনুকূল পেকেজিং কৰা হয়।",
+      "step4Title": "৪. পোনপটীয়া বিতৰণ",
+      "step4Desc": "অসমৰ উপত্যকাৰ পৰা পোনে পোনে আপোনাৰ ঘৰলৈ দ্ৰুত পৰিবহন।"
+    },
+    "section4": {
+      "pill": "🏡 পামৰ অভিজ্ঞতা",
+      "title": "পাম ভ্ৰমণ কৰক",
+      "description": "বজাৰৰ সিপাৰেও পামখনৰ অভিজ্ঞতা লওক। আমাৰ অংশীদাৰ পামসমূহ ভ্ৰমণ কৰক, আপোনাৰ খাদ্যৰ আঁৰৰ মানুহখিনিক লগ কৰক, আৰু চিৰদিন মনত ৰৈ যোৱা স্মৃতি গঢ়ক।",
+      "cta": "এতিয়াই পাম ভ্ৰমণ কৰক"
+    },
+    "section5": {
+      "pill": "🛒 জৈৱিক উৎপাদন",
+      "title": "আমাৰ শস্যসমূহ অন্বেষণ কৰক",
+      "description": "আস্থাভাজন অংশীদাৰ পামসমূহৰ পৰা ঋতুভিত্তিক, পামৰ সজীৱ শস্যসমূহ আৱিষ্কাৰ কৰক। প্ৰতিটো অৰ্ডাৰে ন্যায্য ব্যৱসায় আৰু বহনক্ষম কৃষিক সমৰ্থন কৰে।",
+      "cta": "আমাৰ শস্যসমূহ অন্বেষণ কৰক"
+    },
+    "footer": {
+      "brand": "মেক্ৰিহা – খেতিয়ক প্ৰথম বজাৰ",
+      "tagline": "গ্ৰাম্য পথাৰৰ পৰা চহৰীয়া ঘৰলৈ — ন্যায্যভাৱে।",
+      "exploreTitle": "অন্বেষণ",
+      "ourFarmsTitle": "আমাৰ পামসমূহ",
+      "learnTitle": "জানক",
+      "supportTitle": "সহায়",
+      "newsletterTitle": "শস্য চপোৱাৰ ওচৰত থাকক",
+      "newsletterPlaceholder": "আপোনাৰ ইমেইল ঠিকনা",
+      "newsletterBtn": "চাবস্ক্ৰাইব কৰক",
+      "bottom": "© ২০২৬ মেক্ৰিহা। সৰ্বস্বত্ব সংৰক্ষিত। পামসমূহক সমৰ্থন। সমাজ সংযোগ। একেলগে বিকাশ।"
+    }
+  }
+}
