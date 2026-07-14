@@ -140,7 +140,7 @@ export default function ScrollRiver({ sectionIds, children }) {
     <div ref={wrapperRef} className="relative">
       {isDesktop && geometry && (
         <svg
-          className="absolute inset-0 z-0 pointer-events-none"
+          className="absolute inset-0 z-30 pointer-events-none"
           width="100%"
           height="100%"
           viewBox={`0 0 ${geometry.width} ${geometry.height}`}
