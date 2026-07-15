@@ -105,10 +105,16 @@ history on `main` for the full story, but the durable facts:
 - Real Mekriha logo (`public/mekriha_logo.png`) wired into header/footer,
   replacing placeholder text. Toggles to
   `public/mekriha_assamese_logo.PNG` when `lang === "as"`.
-- Partner Farms circle row and Crop Journey step row are horizontally
-  scrollable (snap-scroll) on mobile instead of stacking vertically —
-  significantly shortens the mobile scroll length. Desktop layout
-  unchanged.
+- Partner Farms circle row, Crop Journey step row, and the product grid
+  (Explore Our Produce) are all horizontally scrollable (snap-scroll) on
+  mobile instead of stacking vertically — significantly shortens the
+  mobile scroll length. Desktop layout unchanged for all three. Product
+  cards also drop their description and shrink padding/text/tag sizing
+  on mobile to stay compact (168px fixed width). The pattern is
+  consistent: `flex flex-nowrap overflow-x-auto ... snap-x snap-mandatory`
+  below `md`, reverting to the original grid/wrap layout at `md:` and up.
+  If more rows of cards/icons need this treatment later, copy this exact
+  pattern for consistency.
 
 ## Git workflow notes
 
@@ -120,7 +126,7 @@ history on `main` for the full story, but the durable facts:
   rules), just tell the user how to sign in.
 - Workflow used throughout: work on `dev`, commit locally, push, open a
   PR via the GitHub MCP tools, merge via the same tools. `dev` and
-  `main` are in sync as of the last merge in this session (PR #3).
+  `main` are in sync as of the last merge (PR #5).
 - **Past incident**: before credentials worked, an early push was done
   via the GitHub API (`push_files`) as a workaround, which subtly
   corrupted some Assamese Unicode text in transcription. It was fixed
@@ -148,3 +154,9 @@ history on `main` for the full story, but the durable facts:
   (`document.querySelector(...).getBoundingClientRect()`, computed
   styles, etc.) rather than trusting a screenshot, and ask the user to
   manually confirm interactive behavior if the tooling seems stuck.
+  Late in this session it degraded further — `document.body`'s own
+  `getBoundingClientRect()` returned all zeros across every open tab,
+  meaning the layout engine wasn't running at all. Restarting the
+  preview server/opening fresh tabs didn't fix it. If this happens
+  again, don't keep retrying — fall back to code review + asking the
+  user to verify visually themselves, same as was done for PR #5.
