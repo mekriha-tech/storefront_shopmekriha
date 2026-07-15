@@ -662,7 +662,7 @@ export default function Home() {
                   alt="Assam organic tea field visit experience"
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-700"
-                  sizes="(max-w-768px) 100vw, 50vw"
+                  sizes="(max-width: 768px) 100vw, 50vw"
                 />
                 {/* Overlay card descriptor */}
                 <div className="absolute bottom-4 left-4 right-4 bg-black/40 backdrop-blur-md border border-white/10 p-4 rounded-xl flex items-center justify-between text-left">
@@ -698,71 +698,71 @@ export default function Home() {
             </div>
 
             {/* Produce Grid from Database API */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto mb-16">
+            <div className="flex flex-nowrap overflow-x-auto gap-4 snap-x snap-mandatory -mx-6 px-6 pb-4 md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-6 md:overflow-visible md:mx-0 md:px-0 md:pb-0 md:snap-none max-w-6xl mx-auto mb-16 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {products.map((product) => {
                 const isAvailable = product.availability_status === "available";
                 return (
-                  <Link href={`/products/${product.id}`} key={product.id} className="group bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between cursor-pointer">
+                  <Link href={`/products/${product.id}`} key={product.id} className="group bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between cursor-pointer w-[168px] shrink-0 snap-start md:w-auto md:shrink">
                     <div>
                       {/* Product Image */}
-                      <div className="relative w-full aspect-[4/3] bg-gray-50 overflow-hidden">
+                      <div className="relative w-full aspect-square md:aspect-[4/3] bg-gray-50 overflow-hidden">
                         <Image
                           src={product.image1}
                           alt={product.name}
                           fill
                           className="object-cover group-hover:scale-103 transition-transform duration-300"
-                          sizes="(max-w-768px) 100vw, 25vw"
+                          sizes="(max-width: 768px) 40vw, 25vw"
                         />
                         {/* Status tag */}
-                        <div className="absolute top-3 right-3">
+                        <div className="absolute top-2 right-2 md:top-3 md:right-3">
                           {isAvailable ? (
-                            <span className="text-[10px] font-bold bg-emerald-500 text-white px-2.5 py-1 rounded-full uppercase tracking-wider">
+                            <span className="text-[9px] md:text-[10px] font-bold bg-emerald-500 text-white px-2 py-0.5 md:px-2.5 md:py-1 rounded-full uppercase tracking-wider">
                               In Stock
                             </span>
                           ) : (
-                            <span className="text-[10px] font-bold bg-amber-500 text-white px-2.5 py-1 rounded-full uppercase tracking-wider">
+                            <span className="text-[9px] md:text-[10px] font-bold bg-amber-500 text-white px-2 py-0.5 md:px-2.5 md:py-1 rounded-full uppercase tracking-wider">
                               Upcoming
                             </span>
                           )}
                         </div>
                       </div>
-                      
+
                       {/* Text info */}
-                      <div className="p-5 text-left">
+                      <div className="p-3 md:p-5 text-left">
                         {/* Tags */}
-                        <span className="text-[9px] font-bold text-[#005748] tracking-wider uppercase bg-[#005748]/5 px-2 py-0.5 rounded-sm">
+                        <span className="hidden md:inline-block text-[9px] font-bold text-[#005748] tracking-wider uppercase bg-[#005748]/5 px-2 py-0.5 rounded-sm">
                           {product.tags.split(",")[0].trim()}
                         </span>
-                        
-                        <h3 className={`font-sans font-bold text-gray-900 text-base mt-2.5 line-clamp-1 group-hover:text-[#005748] transition-colors ${fontClass}`}>
+
+                        <h3 className={`font-sans font-bold text-gray-900 text-sm md:text-base mt-0 md:mt-2.5 line-clamp-1 group-hover:text-[#005748] transition-colors ${fontClass}`}>
                           {product.name}
                         </h3>
-                        
-                        <p className={`text-gray-500 text-xs mt-1.5 line-clamp-2 leading-relaxed ${fontClass}`}>
+
+                        <p className={`hidden md:block text-gray-500 text-xs mt-1.5 line-clamp-2 leading-relaxed ${fontClass}`}>
                           {product.description}
                         </p>
                       </div>
                     </div>
 
                     {/* Bottom action drawer */}
-                    <div className="p-5 pt-0 border-t border-gray-50 flex items-center justify-between text-xs mt-auto">
+                    <div className="p-3 pt-0 md:p-5 md:pt-0 border-t border-gray-50 flex items-center justify-between text-xs mt-auto">
                       {isAvailable ? (
                         <div className="flex flex-col items-start">
                           <div className="flex items-baseline gap-1">
-                            <span className="font-extrabold text-[#005748] text-base">₹{product.discount_price}</span>
-                            <span className="text-[10px] text-gray-400 line-through">₹{product.price}</span>
+                            <span className="font-extrabold text-[#005748] text-sm md:text-base">₹{product.discount_price}</span>
+                            <span className="text-[9px] md:text-[10px] text-gray-400 line-through">₹{product.price}</span>
                           </div>
-                          <span className="text-[10px] text-gray-400">per {product.measure_of_unit}</span>
+                          <span className="text-[9px] md:text-[10px] text-gray-400">per {product.measure_of_unit}</span>
                         </div>
                       ) : (
                         <div className="flex flex-col items-start">
-                          <span className="text-[10px] font-bold text-amber-700">Harvest Timeline</span>
-                          <span className="text-gray-900 font-semibold">{product.ready_by_timeline}</span>
+                          <span className="text-[9px] md:text-[10px] font-bold text-amber-700">Harvest Timeline</span>
+                          <span className="text-gray-900 font-semibold text-xs md:text-sm">{product.ready_by_timeline}</span>
                         </div>
                       )}
 
                       {/* Action text button */}
-                      <span className={`text-[11px] font-bold tracking-wider uppercase border-b-2 border-transparent transition-all ${
+                      <span className={`text-[10px] md:text-[11px] font-bold tracking-wider uppercase border-b-2 border-transparent transition-all ${
                         isAvailable ? "text-[#005748] group-hover:border-[#005748]" : "text-amber-800 group-hover:border-amber-800"
                       }`}>
                         {isAvailable ? "Buy Now" : "Request"}
