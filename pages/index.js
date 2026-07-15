@@ -258,7 +258,7 @@ export default function Home() {
             {/* Logo */}
             <Link href="/" className="flex items-center hover:opacity-90 transition-opacity">
               <Image
-                src="/mekriha_logo.png"
+                src={lang === "as" ? "/mekriha_assamese_logo.PNG" : "/mekriha_logo.png"}
                 alt="Mekriha"
                 width={160}
                 height={34}
@@ -795,7 +795,7 @@ export default function Home() {
             {/* Column 1: Brand & Tagline */}
             <div className="md:col-span-4 flex flex-col items-start text-left">
               <Image
-                src="/mekriha_logo.png"
+                src={lang === "as" ? "/mekriha_assamese_logo.PNG" : "/mekriha_logo.png"}
                 alt="Mekriha"
                 width={160}
                 height={34}
