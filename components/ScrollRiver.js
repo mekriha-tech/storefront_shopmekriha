@@ -5,9 +5,9 @@ const CLOUD_SCALES = [1, 0.6, 1.45, 0.85, 1.15, 0.7];
 
 const SECTION_BG = {
   home: "cream",
-  about: "green",
+  about: "cream",
   produce: "cream",
-  visit: "green",
+  visit: "cream",
   "produce-explore": "cream",
 };
 

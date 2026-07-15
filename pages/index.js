@@ -442,7 +442,7 @@ export default function Home() {
         </section>
 
         {/* Section 2: Growing Stronger, Together */}
-        <section id="about" className="relative overflow-hidden min-h-[82vh] border-t border-gray-100 bg-[#005748] text-[#FAF6D9] flex items-center">
+        <section id="about" className="relative overflow-hidden min-h-[82vh] border-t border-gray-100 bg-white text-[#111827] flex items-center">
           {riverLayer("about")}
           {/* Mirrored Left-aligned Artwork matching Section 1 structure */}
           <div className="absolute inset-y-0 left-0 w-[100vw] lg:w-[100vw] xl:w-[100vw] pointer-events-none z-0">
@@ -462,36 +462,36 @@ export default function Home() {
               {/* Right Column: Text and Logo section matching Section 1 grid width but on the right */}
               <div className="md:col-start-6 md:col-span-7 flex flex-col justify-center items-start text-left">
                 {/* Modern Pill Badge */}
-                <span className={`inline-flex items-center gap-1.5 py-1 px-3.5 rounded-full text-xs font-bold bg-white/10 text-emerald-200 border border-white/10 uppercase tracking-widest mb-6 ${fontClass}`}>
+                <span className={`inline-flex items-center gap-1.5 py-1 px-3.5 rounded-full text-xs font-bold bg-[#005748]/10 text-[#005748] border border-[#005748]/20 uppercase tracking-widest mb-6 ${fontClass}`}>
                   {t.section2.pill}
                 </span>
 
-                <h2 className={`${calSansHeading.className} ${fontClass} font-bold text-[36px] sm:text-[44px] md:text-[42px] lg:text-[48px] leading-[1.1] tracking-tight text-white`}>
+                <h2 className={`${calSansHeading.className} ${fontClass} font-bold text-[36px] sm:text-[44px] md:text-[42px] lg:text-[48px] leading-[1.1] tracking-tight text-gray-900`}>
                   {t.section2.title}
                 </h2>
 
-                <p className={`text-emerald-100/90 text-sm sm:text-base leading-[1.65] mt-4 max-w-xl font-normal ${fontClass}`}>
+                <p className={`text-gray-600 text-sm sm:text-base leading-[1.65] mt-4 max-w-xl font-normal ${fontClass}`}>
                   {t.section2.description}
                 </p>
 
                 {/* Clickable circular logo list centered */}
                 <div className="mt-12 w-full flex flex-col items-start justify-center">
-                  <span className={`${calSansHeading.className} ${fontClass} text-xl md:text-2xl text-white block mb-6 tracking-tight font-bold`}>
+                  <span className={`${calSansHeading.className} ${fontClass} text-xl md:text-2xl text-gray-900 block mb-6 tracking-tight font-bold`}>
                     {t.section2.partnerFarms}
                   </span>
                   {loading ? (
                     <div className="flex gap-4">
-                      <div className="w-16 h-16 rounded-full border border-dashed border-white/20 animate-pulse"></div>
-                      <div className="w-16 h-16 rounded-full border border-dashed border-white/20 animate-pulse"></div>
-                      <div className="w-16 h-16 rounded-full border border-dashed border-white/20 animate-pulse"></div>
+                      <div className="w-16 h-16 rounded-full border border-dashed border-gray-300 animate-pulse"></div>
+                      <div className="w-16 h-16 rounded-full border border-dashed border-gray-300 animate-pulse"></div>
+                      <div className="w-16 h-16 rounded-full border border-dashed border-gray-300 animate-pulse"></div>
                     </div>
                   ) : (
                     <div className="flex items-start justify-start gap-6 lg:gap-8 overflow-x-auto flex-nowrap snap-x snap-mandatory -mx-6 px-6 pb-2 md:flex-wrap md:overflow-visible md:mx-0 md:px-0 md:pb-0 md:snap-none w-full [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                       {farms.slice(0, 3).map((farm) => (
                         <Link href={`/farms/${farm.id}`} key={farm.id} className="group flex flex-col items-center gap-2 max-w-[100px] shrink-0 snap-start transition-all">
                           {/* Sleek Circular Glass Logo Badge */}
-                          <div className="w-20 h-20 rounded-full border border-white/15 bg-white/5 backdrop-blur-md group-hover:translate-y-[-6px] group-hover:border-[#FCD02C] group-hover:shadow-[0_0_20px_rgba(252,208,44,0.3)] transition-all duration-300 flex items-center justify-center overflow-hidden relative p-1 shrink-0">
-                            <div className="w-full h-full relative rounded-full overflow-hidden bg-white/95">
+                          <div className="w-20 h-20 rounded-full border border-gray-200 bg-white shadow-sm group-hover:translate-y-[-6px] group-hover:border-[#005748] group-hover:shadow-lg transition-all duration-300 flex items-center justify-center overflow-hidden relative p-1 shrink-0">
+                            <div className="w-full h-full relative rounded-full overflow-hidden bg-white">
                               <Image
                                 src={farm.logoImage}
                                 alt={`${farm.name} logo`}
@@ -501,7 +501,7 @@ export default function Home() {
                               />
                             </div>
                           </div>
-                          <span className="font-sans text-xs font-semibold text-emerald-100 group-hover:text-[#FCD02C] group-hover:underline text-center leading-tight mt-1 line-clamp-2 transition-colors">
+                          <span className="font-sans text-xs font-semibold text-gray-700 group-hover:text-[#005748] group-hover:underline text-center leading-tight mt-1 line-clamp-2 transition-colors">
                             {farm.name}
                           </span>
                         </Link>
@@ -509,10 +509,10 @@ export default function Home() {
 
                       {/* Explore All Farms Circle */}
                       <Link href="/farms" className="group flex flex-col items-center gap-2 max-w-[100px] shrink-0 snap-start transition-all">
-                        <div className="w-20 h-20 rounded-full border border-dashed border-white/35 bg-white/5 hover:bg-white/10 group-hover:translate-y-[-6px] group-hover:border-[#FCD02C] group-hover:shadow-[0_0_20px_rgba(252,208,44,0.3)] transition-all duration-300 flex items-center justify-center overflow-hidden relative shrink-0">
-                          <span className="text-white group-hover:text-[#FCD02C] font-bold text-2xl">→</span>
+                        <div className="w-20 h-20 rounded-full border border-dashed border-gray-300 bg-white hover:bg-gray-50 group-hover:translate-y-[-6px] group-hover:border-[#005748] group-hover:shadow-lg transition-all duration-300 flex items-center justify-center overflow-hidden relative shrink-0">
+                          <span className="text-[#005748] font-bold text-2xl">→</span>
                         </div>
-                        <span className={`font-sans text-xs font-semibold text-emerald-100 group-hover:text-[#FCD02C] group-hover:underline text-center leading-tight mt-1 line-clamp-2 transition-colors ${fontClass}`}>
+                        <span className={`font-sans text-xs font-semibold text-gray-700 group-hover:text-[#005748] group-hover:underline text-center leading-tight mt-1 line-clamp-2 transition-colors ${fontClass}`}>
                           {t.section2.exploreAll}
                         </span>
                       </Link>
@@ -632,31 +632,31 @@ export default function Home() {
         </section>
 
         {/* Section 4: Visit the Farm */}
-        <section id="visit" className="relative overflow-hidden min-h-[80vh] bg-[#005748] text-[#FAF6D9] flex items-center py-20 md:py-28 border-t border-gray-100">
+        <section id="visit" className="relative overflow-hidden min-h-[80vh] bg-white text-[#111827] flex items-center py-20 md:py-28 border-t border-gray-100">
           {riverLayer("visit")}
           <div className="relative z-10 max-w-7xl mx-auto px-6 w-full">
             <div className="grid md:grid-cols-12 gap-12 items-center">
               {/* Left Column: Text Content */}
               <div className="md:col-span-6 flex flex-col items-start text-left relative z-10">
-                <span className={`inline-flex items-center gap-1.5 py-1 px-3.5 rounded-full text-xs font-bold bg-white/10 text-emerald-200 border border-white/10 uppercase tracking-widest mb-6 ${fontClass}`}>
+                <span className={`inline-flex items-center gap-1.5 py-1 px-3.5 rounded-full text-xs font-bold bg-[#005748]/10 text-[#005748] border border-[#005748]/20 uppercase tracking-widest mb-6 ${fontClass}`}>
                   {t.section4.pill}
                 </span>
 
-                <h2 className={`${calSansHeading.className} ${fontClass} font-bold text-4xl md:text-5xl lg:text-6xl leading-[1.1] tracking-tight text-white mb-6`}>
+                <h2 className={`${calSansHeading.className} ${fontClass} font-bold text-4xl md:text-5xl lg:text-6xl leading-[1.1] tracking-tight text-gray-900 mb-6`}>
                   {t.section4.title}
                 </h2>
 
-                <p className={`text-emerald-100/90 text-sm sm:text-base md:text-lg leading-[1.65] max-w-xl font-normal mb-8 ${fontClass}`}>
+                <p className={`text-gray-600 text-sm sm:text-base md:text-lg leading-[1.65] max-w-xl font-normal mb-8 ${fontClass}`}>
                   {t.section4.description}
                 </p>
 
-                <button className={`py-3.5 px-8 bg-[#FCD02C] text-[#005748] hover:bg-[#ebd25b] transition-all rounded-full shadow-md hover:shadow-lg active:scale-95 font-bold text-sm cursor-pointer ${fontClass}`}>
+                <button className={`py-3.5 px-8 bg-[#005748] text-white hover:bg-[#004337] transition-all rounded-full shadow-md hover:shadow-lg active:scale-95 font-bold text-sm cursor-pointer ${fontClass}`}>
                   {t.section4.cta}
                 </button>
               </div>
 
               {/* Right Column: Visual farm visit card mockup */}
-              <div className="md:col-span-6 relative w-full aspect-[4/3] md:aspect-[3/2] rounded-2xl overflow-hidden border border-white/10 shadow-2xl relative group">
+              <div className="md:col-span-6 relative w-full aspect-[4/3] md:aspect-[3/2] rounded-2xl overflow-hidden border border-gray-200 shadow-xl relative group">
                 <Image
                   src="/images/farms/majuli_hero.png"
                   alt="Assam organic tea field visit experience"
