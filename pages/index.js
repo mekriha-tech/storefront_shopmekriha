@@ -20,11 +20,10 @@ const defaultTranslations = {
       visit: "Visit Farms"
     },
     hero: {
-      pill: "🌱 Farmer-First Marketplace",
-      title: "Where Every Harvest Finds Its True Value",
+      title: "From the fertile banks of the Brahmaputra and the nutrient-rich soils of Assam, we harvest organic, naturally grown food for you — collaborating directly with farms and farmers across the region.",
       description: "Mekriha is a farmer-first marketplace built to reconnect people with the true source of their food. We believe every harvest represents months of dedication, care, and hard work — and that value should reach the farms that grow it.",
-      btnKnowMore: "Know More",
-      btnOurProduce: "Our Produce"
+      btnOurFarms: "Our Farms",
+      btnOurHarvests: "Our Harvests"
     },
     section2: {
       pill: "🌾 Sustainable Partnerships",
@@ -78,11 +77,10 @@ const defaultTranslations = {
       visit: "পাম ভ্ৰমণ"
     },
     hero: {
-      pill: "🌱 খেতিয়ক-প্ৰথম বজাৰ",
-      title: "য'ত প্ৰতিটো চপোৱা শস্যই প্ৰকৃত মূল্য লাভ কৰে",
+      title: "ব্ৰহ্মপুত্ৰৰ উৰ্বৰ পাৰ আৰু অসমৰ পুষ্টিসমৃদ্ধ মাটিৰ পৰা, আমি আপোনালোকৰ বাবে জৈৱিক, প্ৰাকৃতিকভাৱে উৎপাদিত খাদ্য চপাওঁ — অঞ্চলটোৰ পাম আৰু খেতিয়কসকলৰ সৈতে পোনপটীয়াকৈ সহযোগিতা কৰি।",
       description: "মেক্ৰিহা হৈছে এক খেতিয়ক-প্ৰথম বজাৰ যি মানুহক তেওঁলোকৰ খাদ্যৰ প্ৰকৃত উৎসৰ সৈতে পুনৰ সংযোগ কৰাৰ বাবে গঢ়ি তোলা হৈছে। আমি বিশ্বাস কৰোঁ যে প্ৰতিটো শস্যই মাহ মাহ ধৰি কৰা উৎসৰ্গা, যত্ন আৰু কঠোৰ পৰিশ্ৰমক প্ৰতিনিধিত্ব কৰে — আৰু সেই মূল্য ইয়াৰ উৎপাদক পামসমূহৰ ওচৰলৈ যাব লাগে।",
-      btnKnowMore: "অধিক জানক",
-      btnOurProduce: "আমাৰ শস্যসমূহ"
+      btnOurFarms: "আমাৰ পামসমূহ",
+      btnOurHarvests: "আমাৰ শস্যসমূহ"
     },
     section2: {
       pill: "🌾 বহনক্ষম অংশীদাৰিত্ব",
@@ -263,7 +261,7 @@ export default function Home() {
                 width={160}
                 height={34}
                 priority
-                className="h-7 md:h-8 w-auto"
+                className={lang === "as" ? "h-8 md:h-9 w-auto" : "h-7 md:h-8 w-auto"}
               />
             </Link>
 
@@ -402,11 +400,6 @@ export default function Home() {
             <div className="grid md:grid-cols-12 items-center">
               {/* Left Column */}
               <div className="md:col-span-7 flex flex-col items-start">
-                {/* Modern Pill Badge */}
-                <span className={`inline-flex items-center gap-1.5 py-1 px-3.5 rounded-full text-xs font-bold bg-[#005748]/10 text-[#005748] border border-[#005748]/20 uppercase tracking-widest mb-6 ${fontClass}`}>
-                  {t.hero.pill}
-                </span>
-
                 <h1 className={`${calSansHeading.className} ${fontClass} font-bold text-[36px] sm:text-[48px] md:text-[44px] lg:text-[54px] xl:text-[62px] leading-[1.12] tracking-tight text-gray-900`}>
                   {t.hero.title}
                 </h1>
@@ -416,13 +409,19 @@ export default function Home() {
                 </p>
 
                 <div className="flex items-center gap-4 mt-8">
-                  <button className={`py-3 px-8 border border-gray-300 text-gray-700 hover:text-[#005748] hover:border-[#005748] font-bold text-sm hover:bg-white transition-all rounded-full shadow-sm active:scale-95 ${fontClass}`}>
-                    {t.hero.btnKnowMore}
-                  </button>
+                  <a
+                    href="#about"
+                    className={`py-3 px-8 border border-gray-300 text-gray-700 hover:text-[#005748] hover:border-[#005748] font-bold text-sm hover:bg-white transition-all rounded-full shadow-sm active:scale-95 ${fontClass}`}
+                  >
+                    {t.hero.btnOurFarms}
+                  </a>
 
-                  <button className={`py-3 px-8 bg-[#005748] text-white font-bold text-sm hover:bg-[#004337] transition-all rounded-full shadow-md hover:shadow-lg active:scale-95 ${fontClass}`}>
-                    {t.hero.btnOurProduce}
-                  </button>
+                  <Link
+                    href="/products"
+                    className={`py-3 px-8 bg-[#005748] text-white font-bold text-sm hover:bg-[#004337] transition-all rounded-full shadow-md hover:shadow-lg active:scale-95 ${fontClass}`}
+                  >
+                    {t.hero.btnOurHarvests}
+                  </Link>
                 </div>
               </div>
             </div>
@@ -799,7 +798,7 @@ export default function Home() {
                 alt="Mekriha"
                 width={160}
                 height={34}
-                className="h-7 w-auto mb-4"
+                className={lang === "as" ? "h-8 w-auto mb-4" : "h-7 w-auto mb-4"}
               />
               <p className={`font-semibold text-gray-900 mb-1 ${fontClass}`}>
                 {t.footer.brand}

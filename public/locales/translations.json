@@ -7,11 +7,10 @@
       "visit": "Visit Farms"
     },
     "hero": {
-      "pill": "🌱 Farmer-First Marketplace",
-      "title": "Where Every Harvest Finds Its True Value",
+      "title": "From the fertile banks of the Brahmaputra and the nutrient-rich soils of Assam, we harvest organic, naturally grown food for you — collaborating directly with farms and farmers across the region.",
       "description": "Mekriha is a farmer-first marketplace built to reconnect people with the true source of their food. We believe every harvest represents months of dedication, care, and hard work — and that value should reach the farms that grow it.",
-      "btnKnowMore": "Know More",
-      "btnOurProduce": "Our Produce"
+      "btnOurFarms": "Our Farms",
+      "btnOurHarvests": "Our Harvests"
     },
     "section2": {
       "pill": "🌾 Sustainable Partnerships",
@@ -66,11 +65,10 @@
       "visit": "পাম ভ্ৰমণ"
     },
     "hero": {
-      "pill": "🌱 খেতিয়ক-প্ৰথম বজাৰ",
-      "title": "য'ত প্ৰতিটো চপোৱা শস্যই প্ৰকৃত মূল্য লাভ কৰে",
+      "title": "ব্ৰহ্মপুত্ৰৰ উৰ্বৰ পাৰ আৰু অসমৰ পুষ্টিসমৃদ্ধ মাটিৰ পৰা, আমি আপোনালোকৰ বাবে জৈৱিক, প্ৰাকৃতিকভাৱে উৎপাদিত খাদ্য চপাওঁ — অঞ্চলটোৰ পাম আৰু খেতিয়কসকলৰ সৈতে পোনপটীয়াকৈ সহযোগিতা কৰি।",
       "description": "মেক্ৰিহা হৈছে এক খেতিয়ক-প্ৰথম বজাৰ যি মানুহক তেওঁলোকৰ খাদ্যৰ প্ৰকৃত উৎসৰ সৈতে পুনৰ সংযোগ কৰাৰ বাবে গঢ়ি তোলা হৈছে। আমি বিশ্বাস কৰোঁ যে প্ৰতিটো শস্যই মাহ মাহ ধৰি কৰা উৎসৰ্গা, যত্ন আৰু কঠোৰ পৰিশ্ৰমক প্ৰতিনিধিত্ব কৰে — আৰু সেই মূল্য ইয়াৰ উৎপাদক পামসমূহৰ ওচৰলৈ যাব লাগে।",
-      "btnKnowMore": "অধিক জানক",
-      "btnOurProduce": "আমাৰ শস্যসমূহ"
+      "btnOurFarms": "আমাৰ পামসমূহ",
+      "btnOurHarvests": "আমাৰ শস্যসমূহ"
     },
     "section2": {
       "pill": "🌾 বহনক্ষম অংশীদাৰিত্ব",
