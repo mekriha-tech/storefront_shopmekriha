@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Cal_Sans } from "next/font/google";
+import ScrollRiver from "../components/ScrollRiver";
 
 const calSansHeading = Cal_Sans({
   weight: "400",
@@ -373,6 +374,7 @@ export default function Home() {
           )}
         </header>
 
+        <ScrollRiver sectionIds={["home", "about", "produce", "visit", "produce-explore"]}>
         {/* Hero Section */}
         <section id="home" className="relative overflow-hidden min-h-[82vh] bg-gradient-to-br from-[#FAF8F5] via-[#FAF8F5] to-[#F3EEE5] flex items-center">
           {/* Full-width Hero Image */}
@@ -770,6 +772,7 @@ export default function Home() {
 
           </div>
         </section>
+        </ScrollRiver>
 
         {/* Expanded Premium Footer */}
         <footer className="w-full bg-[#FAF8F5] border-t border-gray-200/80 pt-16 pb-8 relative z-20 text-sm text-gray-600">
