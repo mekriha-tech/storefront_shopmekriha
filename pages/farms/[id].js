@@ -4,6 +4,8 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { Cal_Sans } from "next/font/google";
+import usePersistentLanguage from "../../components/usePersistentLanguage";
+import FloatingLanguageToggle from "../../components/FloatingLanguageToggle";
 
 const calSansHeading = Cal_Sans({
   weight: "400",
@@ -13,6 +15,7 @@ const calSansHeading = Cal_Sans({
 export default function FarmPage() {
   const router = useRouter();
   const { id } = router.query;
+  const [lang, setLang] = usePersistentLanguage("en");
   const [farm, setFarm] = useState(null);
   const [farmProducts, setFarmProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -329,6 +332,7 @@ export default function FarmPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#FAF8F5] flex items-center justify-center font-sans text-gray-800">
+        <FloatingLanguageToggle lang={lang} setLang={setLang} />
         <div className="text-center">
           <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#005748] mx-auto mb-4"></div>
           <p className="font-semibold text-sm text-gray-600">Loading Farm Profile...</p>
@@ -340,6 +344,7 @@ export default function FarmPage() {
   if (!farm) {
     return (
       <div className="min-h-screen bg-[#FAF8F5] flex items-center justify-center font-sans text-gray-800">
+        <FloatingLanguageToggle lang={lang} setLang={setLang} />
         <div className="text-center bg-white p-8 border border-gray-100 shadow-xl rounded-2xl max-w-md mx-6">
           <h1 className="text-2xl font-bold mb-4 text-gray-900">Profile Not Found</h1>
           <p className="text-gray-500 mb-6 text-sm">The organic farm profile you are looking for does not exist or has been moved.</p>
@@ -361,6 +366,8 @@ export default function FarmPage() {
         <meta name="description" content={`Explore ${farm?.name || ""} in ${farm?.district || ""}, Assam. Dynamic details about organic harvesting of ${farm?.harvest || ""}.`} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
+
+      <FloatingLanguageToggle lang={lang} setLang={setLang} />
 
       <div className="min-h-screen bg-[#FAF8F5] text-gray-900 flex flex-col justify-between font-sans selection:bg-[#005748]/10">
         {/* Navigation / Back Header */}
