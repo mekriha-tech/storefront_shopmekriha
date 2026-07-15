@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Cal_Sans } from "next/font/google";
 import ScrollRiver from "../components/ScrollRiver";
+import usePersistentLanguage from "../components/usePersistentLanguage";
+import FloatingLanguageToggle from "../components/FloatingLanguageToggle";
 
 const calSansHeading = Cal_Sans({
   weight: "400",
@@ -129,7 +131,7 @@ const defaultTranslations = {
 };
 
 export default function Home() {
-  const [lang, setLang] = useState("en");
+  const [lang, setLang] = usePersistentLanguage("en");
   const [translations, setTranslations] = useState(defaultTranslations);
   const [farms, setFarms] = useState([]);
   const [products, setProducts] = useState([]);
@@ -244,6 +246,7 @@ export default function Home() {
         "collaborating directly with farms and farmers across the region."
       ]
     : t.hero.title
+        .replace(/,\s*/g, "\u0964 ")
         .replace(/\s+â€”\s+|\s+\u2014\s+/g, "\u0964 ")
         .split("\u0964")
         .map((line) => line.trim())
@@ -260,6 +263,8 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
+      <FloatingLanguageToggle lang={lang} setLang={setLang} />
 
       <div className="font-sans min-h-screen flex flex-col justify-between overflow-x-hidden bg-[#FAF8F5] text-[#111827]">
         {/* Navigation Bar */}
@@ -305,27 +310,7 @@ export default function Home() {
               </a>
             </nav>
 
-            {/* Language Switcher Toggle Buttons */}
             <div className="flex items-center gap-3">
-              <div className="flex bg-gray-100/80 p-0.5 rounded-full border border-gray-200">
-                <button
-                  onClick={() => setLang("en")}
-                  className={`py-1.5 px-3.5 rounded-full text-xs font-bold tracking-wider transition-all duration-200 cursor-pointer ${
-                    lang === "en" ? "bg-[#005748] text-white shadow-sm" : "text-gray-500 hover:text-gray-800"
-                  }`}
-                >
-                  EN
-                </button>
-                <button
-                  onClick={() => setLang("as")}
-                  className={`py-1.5 px-3.5 rounded-full text-xs font-bold tracking-wider transition-all duration-200 cursor-pointer font-assamese ${
-                    lang === "as" ? "bg-[#005748] text-white shadow-sm" : "text-gray-500 hover:text-gray-800"
-                  }`}
-                >
-                  অসমীয়া
-                </button>
-              </div>
-
               {/* Mobile Menu Button */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -412,16 +397,22 @@ export default function Home() {
             <div className="grid md:grid-cols-12 items-center">
               {/* Left Column */}
               <div className="md:col-span-12 flex flex-col items-center text-center">
-                <h1 className={`font-sans ${fontClass} w-full grid grid-cols-1 md:grid-cols-2 gap-y-2.5 md:gap-y-3.5 md:gap-x-40 lg:gap-x-56 xl:gap-x-64 font-medium text-[22px] min-[390px]:text-[24px] sm:text-[27px] md:text-[27px] lg:text-[31px] xl:text-[34px] leading-[1.34] sm:leading-[1.36] md:leading-[1.38] tracking-normal text-[#005748]`}>
+                <h1 className={`font-sans ${fontClass} w-full grid grid-cols-1 md:grid-cols-2 gap-y-2 md:gap-y-3.5 md:gap-x-40 lg:gap-x-56 xl:gap-x-64 tracking-normal`}>
                   {heroTitleLines.map((line, index) => (
                     <span
                       key={`${lang}-${index}-${line}`}
-                      className={`block hero-title-line max-w-[22rem] sm:max-w-[36rem] md:max-w-[27rem] ${
+                      className={`block hero-title-line max-w-[21rem] sm:max-w-[34rem] md:max-w-[27rem] leading-[1.35] ${
                         index % 2 === 0
                           ? "justify-self-center text-center md:justify-self-end"
                           : "justify-self-center text-center md:justify-self-start"
+                      } ${
+                        index === 0
+                          ? "text-[#005748] font-semibold text-[20px] min-[390px]:text-[22px] sm:text-[25px] md:text-[29px] lg:text-[33px] md:font-medium md:text-[#005748]"
+                          : index === 2
+                            ? "text-[#0A6B5A] font-medium text-[18px] min-[390px]:text-[20px] sm:text-[23px] md:text-[29px] lg:text-[33px] md:text-[#005748]"
+                            : "text-[#60736D] font-normal text-[15px] min-[390px]:text-[16px] sm:text-[19px] md:text-[29px] lg:text-[33px] md:font-medium md:text-[#005748]"
                       }`}
-                      style={{ animationDelay: `${index * 320}ms` }}
+                      style={{ animationDelay: `${index * 520}ms` }}
                     >
                       {line}
                     </span>

@@ -3,6 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Cal_Sans } from "next/font/google";
+import usePersistentLanguage from "../../components/usePersistentLanguage";
+import FloatingLanguageToggle from "../../components/FloatingLanguageToggle";
 
 const calSansHeading = Cal_Sans({
   weight: "400",
@@ -28,7 +30,7 @@ const directoryTranslations = {
 };
 
 export default function FarmsDirectoryPage() {
-  const [lang, setLang] = useState("en");
+  const [lang, setLang] = usePersistentLanguage("en");
   const [farms, setFarms] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -56,6 +58,8 @@ export default function FarmsDirectoryPage() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
+      <FloatingLanguageToggle lang={lang} setLang={setLang} />
+
       <div className="min-h-screen bg-[#FAF8F5] text-gray-900 flex flex-col justify-between font-sans selection:bg-[#005748]/10">
         {/* Sticky Header */}
         <header className="w-full bg-[#FAF8F5]/85 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100 py-5">
@@ -71,27 +75,7 @@ export default function FarmsDirectoryPage() {
               />
             </Link>
             
-            {/* Header Language Toggler */}
             <div className="flex items-center gap-4">
-              <div className="flex bg-gray-100/80 p-0.5 rounded-full border border-gray-200">
-                <button
-                  onClick={() => setLang("en")}
-                  className={`py-1.5 px-3.5 rounded-full text-xs font-bold tracking-wider transition-all duration-200 cursor-pointer ${
-                    lang === "en" ? "bg-[#005748] text-white shadow-sm" : "text-gray-500 hover:text-gray-800"
-                  }`}
-                >
-                  EN
-                </button>
-                <button
-                  onClick={() => setLang("as")}
-                  className={`py-1.5 px-3.5 rounded-full text-xs font-bold tracking-wider transition-all duration-200 cursor-pointer font-assamese ${
-                    lang === "as" ? "bg-[#005748] text-white shadow-sm" : "text-gray-500 hover:text-gray-800"
-                  }`}
-                >
-                  অসমীয়া
-                </button>
-              </div>
-              
               <Link
                 href="/"
                 className="text-xs font-bold uppercase tracking-wider text-gray-500 hover:text-[#005748] transition-colors"

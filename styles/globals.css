@@ -70,7 +70,7 @@ body {
 }
 
 .hero-title-line {
-  animation: heroTitleReveal 1.15s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation: heroTitleReveal 1.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
 @media (prefers-reduced-motion: reduce) {
