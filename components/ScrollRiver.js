@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { generateWavePoints, pointsToSmoothPath, pointsToRibbonPath, splitPointsBySection } from "./riverPath";
+import { generateWavePoints, pointsToSmoothPath, splitPointsBySection } from "./riverPath";
+
+const CLOUD_SCALES = [1, 0.6, 1.45, 0.85, 1.15, 0.7];
 
 const SECTION_BG = {
   home: "cream",
@@ -23,7 +25,7 @@ const RIVER_WIDTH_MIN = 70;
 const RIVER_WIDTH_MAX = 120;
 const HIGHLIGHT_WIDTH_RATIO = 0.35; // fraction of river width
 
-const CLOUD_COUNT = 5;
+const CLOUD_COUNT = 6;
 const ROTATION_DAMPING = 0.35; // subtler tilt for the top-down boat
 const FADE_HALF_RANGE_RATIO = 0.55; // fraction of viewport height, clear zone around the boat
 
@@ -66,11 +68,11 @@ function Boat({ x, y, angle }) {
   );
 }
 
-function Cloud({ x, y, seed }) {
+function Cloud({ x, y, seed, scale }) {
   const duration = 12 + (seed % 5) * 2;
   const delay = -((seed % 4) * 3);
   return (
-    <g transform={`translate(${x}, ${y})`}>
+    <g transform={`translate(${x}, ${y}) scale(${scale})`}>
       <g className="river-cloud-drift" style={{ animationDuration: `${duration}s`, animationDelay: `${delay}s` }}>
         <ellipse cx="0" cy="-4" rx="20" ry="13" fill="#FFFFFF" opacity="0.95" />
         <ellipse cx="-18" cy="3" rx="16" ry="10" fill="#FFFDF7" opacity="0.92" />
@@ -118,25 +120,31 @@ export default function ScrollRiver({ sectionIds, children }) {
     });
     boundaries[0] = 0;
 
+    // Each segment's centerline is rendered directly as a thick STROKE
+    // (not an offset-polygon ribbon) so the river band is mathematically
+    // guaranteed to stay centered on the exact same curve the boat's
+    // getPointAtLength() travels along - no separate offset/smoothing
+    // math that could drift apart from the boat's path near curve peaks.
     const segments = splitPointsBySection(points, boundaries).map((segPoints, i) => {
       const bg = SECTION_BG[sectionIds[i]] || "cream";
       return {
-        ribbonD: pointsToRibbonPath(segPoints, riverWidth),
-        highlightD: pointsToRibbonPath(segPoints, riverWidth * HIGHLIGHT_WIDTH_RATIO),
+        centerD: pointsToSmoothPath(segPoints),
         color: strokeColorFor(bg),
         bankColor: bankColorFor(bg),
       };
     });
+
+    const centerlineD = segments.map((seg) => seg.centerD).join(" ");
 
     const cloudCount = Math.min(CLOUD_COUNT, points.length);
     const clouds = Array.from({ length: cloudCount }, (_, i) => {
       const idx = Math.round(((i + 1) / (cloudCount + 1)) * (points.length - 1));
       const point = points[idx];
       const side = i % 2 === 0 ? 1 : -1;
-      return { x: point.x + side * riverWidth * 0.4, y: point.y };
+      return { x: point.x + side * riverWidth * 0.4, y: point.y, scale: CLOUD_SCALES[i % CLOUD_SCALES.length] };
     });
 
-    setGeometry({ width, height, points, segments, clouds });
+    setGeometry({ width, height, points, segments, centerlineD, clouds, riverWidth });
   }, [sectionIds]);
 
   useEffect(() => {
@@ -220,17 +228,33 @@ export default function ScrollRiver({ sectionIds, children }) {
           <g mask="url(#riverFadeMask)">
             {geometry.segments.map((seg, i) => (
               <g key={i}>
-                <path d={seg.ribbonD} fill={seg.color} opacity="0.55" />
-                <path d={seg.highlightD} fill={seg.bankColor} opacity="0.35" />
+                <path
+                  d={seg.centerD}
+                  fill="none"
+                  stroke={seg.color}
+                  strokeWidth={geometry.riverWidth}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  opacity="0.55"
+                />
+                <path
+                  d={seg.centerD}
+                  fill="none"
+                  stroke={seg.bankColor}
+                  strokeWidth={geometry.riverWidth * HIGHLIGHT_WIDTH_RATIO}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  opacity="0.4"
+                />
               </g>
             ))}
           </g>
 
-          <path ref={svgPathRef} d={pointsToSmoothPath(geometry.points)} fill="none" stroke="none" />
+          <path ref={svgPathRef} d={geometry.centerlineD} fill="none" stroke="none" />
           <Boat x={boat.x} y={boat.y} angle={boat.angle} />
 
           {geometry.clouds.map((cloud, i) => (
-            <Cloud key={i} x={cloud.x} y={cloud.y} seed={i} />
+            <Cloud key={i} x={cloud.x} y={cloud.y} seed={i} scale={cloud.scale} />
           ))}
         </svg>
       )}
