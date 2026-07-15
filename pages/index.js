@@ -20,11 +20,10 @@ const defaultTranslations = {
       visit: "Visit Farms"
     },
     hero: {
-      pill: "🌱 Farmer-First Marketplace",
-      title: "Where Every Harvest Finds Its True Value",
+      title: "From the fertile banks of the Brahmaputra and the nutrient-rich soils of Assam, we harvest organic, naturally grown food for you — collaborating directly with farms and farmers across the region.",
       description: "Mekriha is a farmer-first marketplace built to reconnect people with the true source of their food. We believe every harvest represents months of dedication, care, and hard work — and that value should reach the farms that grow it.",
-      btnKnowMore: "Know More",
-      btnOurProduce: "Our Produce"
+      btnOurFarms: "Our Farms",
+      btnOurHarvests: "Our Harvests"
     },
     section2: {
       pill: "🌾 Sustainable Partnerships",
@@ -78,11 +77,10 @@ const defaultTranslations = {
       visit: "পাম ভ্ৰমণ"
     },
     hero: {
-      pill: "🌱 খেতিয়ক-প্ৰথম বজাৰ",
-      title: "য'ত প্ৰতিটো চপোৱা শস্যই প্ৰকৃত মূল্য লাভ কৰে",
+      title: "ব্ৰহ্মপুত্ৰৰ উৰ্বৰ পাৰ আৰু অসমৰ পুষ্টিসমৃদ্ধ মাটিৰ পৰা, আমি আপোনালোকৰ বাবে জৈৱিক, প্ৰাকৃতিকভাৱে উৎপাদিত খাদ্য চপাওঁ — অঞ্চলটোৰ পাম আৰু খেতিয়কসকলৰ সৈতে পোনপটীয়াকৈ সহযোগিতা কৰি।",
       description: "মেক্ৰিহা হৈছে এক খেতিয়ক-প্ৰথম বজাৰ যি মানুহক তেওঁলোকৰ খাদ্যৰ প্ৰকৃত উৎসৰ সৈতে পুনৰ সংযোগ কৰাৰ বাবে গঢ়ি তোলা হৈছে। আমি বিশ্বাস কৰোঁ যে প্ৰতিটো শস্যই মাহ মাহ ধৰি কৰা উৎসৰ্গা, যত্ন আৰু কঠোৰ পৰিশ্ৰমক প্ৰতিনিধিত্ব কৰে — আৰু সেই মূল্য ইয়াৰ উৎপাদক পামসমূহৰ ওচৰলৈ যাব লাগে।",
-      btnKnowMore: "অধিক জানক",
-      btnOurProduce: "আমাৰ শস্যসমূহ"
+      btnOurFarms: "আমাৰ পামসমূহ",
+      btnOurHarvests: "আমাৰ শস্যসমূহ"
     },
     section2: {
       pill: "🌾 বহনক্ষম অংশীদাৰিত্ব",
@@ -238,6 +236,18 @@ export default function Home() {
 
   // Helper font class to apply Noto Sans Bengali when Assamese is active
   const fontClass = lang === "as" ? "font-assamese tracking-normal font-medium" : "";
+  const heroTitleLines = lang === "en"
+    ? [
+        "From the fertile banks of the Brahmaputra",
+        "and the nutrient-rich soils of Assam,",
+        "we harvest organic, naturally grown food for you",
+        "collaborating directly with farms and farmers across the region."
+      ]
+    : t.hero.title
+        .replace(/\s+â€”\s+|\s+\u2014\s+/g, "\u0964 ")
+        .split("\u0964")
+        .map((line) => line.trim())
+        .filter(Boolean);
 
   return (
     <>
@@ -263,7 +273,7 @@ export default function Home() {
                 width={160}
                 height={34}
                 priority
-                className="h-7 md:h-8 w-auto"
+                className={lang === "as" ? "h-14 md:h-18 w-auto" : "h-7 md:h-8 w-auto"}
               />
             </Link>
 
@@ -383,10 +393,10 @@ export default function Home() {
         {(riverLayer) => (
         <>
         {/* Hero Section */}
-        <section id="home" className="relative overflow-hidden min-h-[82vh] bg-gradient-to-br from-[#FAF8F5] via-[#FAF8F5] to-[#F3EEE5] flex items-center">
+        <section id="home" className="relative overflow-hidden min-h-[calc(100svh-72px)] md:min-h-[82vh] bg-gradient-to-br from-[#FAF8F5] via-[#FAF8F5] to-[#F3EEE5] flex flex-col md:items-center">
           {riverLayer("home")}
           {/* Full-width Hero Image */}
-          <div className="absolute inset-y-0 right-0 w-[100vw] lg:w-[100vw] xl:w-[100vw] pointer-events-none z-0">
+          <div className="absolute inset-y-0 right-0 hidden w-[100vw] pointer-events-none z-0 md:block">
             <Image
               src="/herovector.png"
               alt="Farmer walking with harvested bundles under a leafy green tree"
@@ -398,38 +408,51 @@ export default function Home() {
           </div>
 
           {/* Content */}
-          <div className="relative z-10 max-w-7xl mx-auto px-6 w-full py-12 md:py-20">
+          <div className="relative z-10 max-w-7xl mx-auto px-6 w-full pt-9 pb-3 sm:pt-12 md:py-20">
             <div className="grid md:grid-cols-12 items-center">
               {/* Left Column */}
-              <div className="md:col-span-7 flex flex-col items-start">
-                {/* Modern Pill Badge */}
-                <span className={`inline-flex items-center gap-1.5 py-1 px-3.5 rounded-full text-xs font-bold bg-[#005748]/10 text-[#005748] border border-[#005748]/20 uppercase tracking-widest mb-6 ${fontClass}`}>
-                  {t.hero.pill}
-                </span>
-
-                <h1 className={`${calSansHeading.className} ${fontClass} font-bold text-[36px] sm:text-[48px] md:text-[44px] lg:text-[54px] xl:text-[62px] leading-[1.12] tracking-tight text-gray-900`}>
-                  {t.hero.title}
+              <div className="md:col-span-12 flex flex-col items-center text-center">
+                <h1 className={`font-sans ${fontClass} w-full grid grid-cols-1 md:grid-cols-2 gap-y-2.5 md:gap-y-3.5 md:gap-x-40 lg:gap-x-56 xl:gap-x-64 font-medium text-[22px] min-[390px]:text-[24px] sm:text-[27px] md:text-[27px] lg:text-[31px] xl:text-[34px] leading-[1.34] sm:leading-[1.36] md:leading-[1.38] tracking-normal text-[#005748]`}>
+                  {heroTitleLines.map((line, index) => (
+                    <span
+                      key={`${lang}-${index}-${line}`}
+                      className={`block hero-title-line max-w-[22rem] sm:max-w-[36rem] md:max-w-[27rem] ${
+                        index % 2 === 0
+                          ? "justify-self-center text-center md:justify-self-end"
+                          : "justify-self-center text-center md:justify-self-start"
+                      }`}
+                      style={{ animationDelay: `${index * 320}ms` }}
+                    >
+                      {line}
+                    </span>
+                  ))}
                 </h1>
 
-                <p className={`text-gray-600 text-sm sm:text-base md:text-lg leading-[1.65] mt-6 max-w-xl font-normal ${fontClass}`}>
+                <p className={`text-gray-600 text-[13px] sm:text-[15px] md:text-[17px] leading-[1.7] mt-5 md:mt-6 max-w-[20rem] sm:max-w-xl font-normal ${fontClass}`}>
                   {t.hero.description}
                 </p>
 
-                <div className="flex items-center gap-4 mt-8">
-                  <button className={`py-3 px-8 border border-gray-300 text-gray-700 hover:text-[#005748] hover:border-[#005748] font-bold text-sm hover:bg-white transition-all rounded-full shadow-sm active:scale-95 ${fontClass}`}>
-                    {t.hero.btnKnowMore}
-                  </button>
+                <div className="flex items-center gap-3 sm:gap-4 mt-7 md:mt-8">
+                  <a
+                    href="#about"
+                    className={`py-3 px-6 sm:px-8 border border-gray-300 text-gray-700 hover:text-[#005748] hover:border-[#005748] font-bold text-xs sm:text-sm hover:bg-white transition-all rounded-full shadow-sm active:scale-95 ${fontClass}`}
+                  >
+                    {t.hero.btnOurFarms}
+                  </a>
 
-                  <button className={`py-3 px-8 bg-[#005748] text-white font-bold text-sm hover:bg-[#004337] transition-all rounded-full shadow-md hover:shadow-lg active:scale-95 ${fontClass}`}>
-                    {t.hero.btnOurProduce}
-                  </button>
+                  <Link
+                    href="/products"
+                    className={`py-3 px-6 sm:px-8 bg-[#005748] text-white font-bold text-xs sm:text-sm hover:bg-[#004337] transition-all rounded-full shadow-md hover:shadow-lg active:scale-95 ${fontClass}`}
+                  >
+                    {t.hero.btnOurHarvests}
+                  </Link>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Mobile Image Fallback */}
-          <div className="relative w-full h-[320px] sm:h-[400px] md:hidden mt-4">
+          <div className="relative z-0 w-full h-[230px] min-[390px]:h-[270px] sm:h-[340px] md:hidden mt-auto">
             <Image
               src="/herovector.png"
               alt="Farmer"
@@ -799,7 +822,7 @@ export default function Home() {
                 alt="Mekriha"
                 width={160}
                 height={34}
-                className="h-7 w-auto mb-4"
+                className={lang === "as" ? "h-8 w-auto mb-4" : "h-7 w-auto mb-4"}
               />
               <p className={`font-semibold text-gray-900 mb-1 ${fontClass}`}>
                 {t.footer.brand}

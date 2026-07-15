@@ -209,8 +209,15 @@ export default function ProductDetailPage() {
         {/* Sticky Header */}
         <header className="w-full bg-[#FAF8F5]/85 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100 py-5">
           <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-            <Link href="/" className={`${calSansHeading.className} font-bold text-2xl tracking-tight text-[#005748] hover:opacity-90 transition-opacity uppercase`}>
-              Logo
+            <Link href="/" className="flex items-center hover:opacity-90 transition-opacity">
+              <Image
+                src="/mekriha_logo.png"
+                alt="Mekriha"
+                width={160}
+                height={34}
+                priority
+                className="h-7 md:h-8 w-auto"
+              />
             </Link>
             <Link
               href="/"
