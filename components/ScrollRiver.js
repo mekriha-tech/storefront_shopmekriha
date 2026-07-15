@@ -16,18 +16,42 @@ const BANK_ON_CREAM = "#F3EEE5";
 const RIVER_ON_GREEN = "#FAF6D9";
 const BANK_ON_GREEN = "#0A6B5A";
 
-const AMPLITUDE_RATIO = 0.15; // fraction of container width
 const WAVELENGTHS_PER_SECTION = 1;
 const SAMPLE_SPACING = 40; // px
-
-const RIVER_WIDTH_RATIO = 0.075; // fraction of container width
-const RIVER_WIDTH_MIN = 70;
-const RIVER_WIDTH_MAX = 120;
 const HIGHLIGHT_WIDTH_RATIO = 0.35; // fraction of river width
 
 const CLOUD_COUNT = 6;
 const ROTATION_DAMPING = 0.35; // subtler tilt for the top-down boat
 const FADE_HALF_RANGE_RATIO = 0.55; // fraction of viewport height, clear zone around the boat
+
+const MOBILE_BREAKPOINT = "(max-width: 767px)";
+
+// Desktop: river winds through the gutter between two-column content,
+// rendered fairly solid since it mostly avoids overlapping text.
+const DESKTOP_TUNING = {
+  amplitudeRatio: 0.15,
+  riverWidthRatio: 0.075,
+  riverWidthMin: 70,
+  riverWidthMax: 120,
+  riverOpacity: 0.55,
+  highlightOpacity: 0.4,
+  boatScale: 1,
+  cloudScale: 1,
+};
+
+// Mobile: single-column layout means the river sits behind the full
+// width of the text, so it's wide/low-amplitude (a soft wash rather
+// than a snaking line) and much lower opacity to keep copy legible.
+const MOBILE_TUNING = {
+  amplitudeRatio: 0.08,
+  riverWidthRatio: 0.55,
+  riverWidthMin: 60,
+  riverWidthMax: 160,
+  riverOpacity: 0.22,
+  highlightOpacity: 0.15,
+  boatScale: 0.65,
+  cloudScale: 0.7,
+};
 
 function strokeColorFor(bg) {
   return bg === "green" ? RIVER_ON_GREEN : RIVER_ON_CREAM;
@@ -37,13 +61,13 @@ function bankColorFor(bg) {
   return bg === "green" ? BANK_ON_GREEN : BANK_ON_CREAM;
 }
 
-function clampRiverWidth(width) {
-  return Math.max(RIVER_WIDTH_MIN, Math.min(RIVER_WIDTH_MAX, width * RIVER_WIDTH_RATIO));
+function clampRiverWidth(width, tuning) {
+  return Math.max(tuning.riverWidthMin, Math.min(tuning.riverWidthMax, width * tuning.riverWidthRatio));
 }
 
-function Boat({ x, y, angle }) {
+function Boat({ x, y, angle, scale }) {
   return (
-    <g style={{ transform: `translate(${x}px, ${y}px) rotate(${angle}deg)`, transformOrigin: "0 0" }}>
+    <g style={{ transform: `translate(${x}px, ${y}px) rotate(${angle}deg) scale(${scale})`, transformOrigin: "0 0" }}>
       <g className="river-boat-bob">
         {/* Outer hull rim */}
         <path
@@ -86,13 +110,13 @@ function Cloud({ x, y, seed, scale }) {
 export default function ScrollRiver({ sectionIds, children }) {
   const wrapperRef = useRef(null);
   const svgPathRef = useRef(null);
-  const [isDesktop, setIsDesktop] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const [geometry, setGeometry] = useState(null);
   const [boat, setBoat] = useState({ x: 0, y: 0, angle: 0, viewportH: 900 });
 
   useEffect(() => {
-    const mql = window.matchMedia("(min-width: 768px)");
-    const update = () => setIsDesktop(mql.matches);
+    const mql = window.matchMedia(MOBILE_BREAKPOINT);
+    const update = () => setIsMobile(mql.matches);
     update();
     mql.addEventListener("change", update);
     return () => mql.removeEventListener("change", update);
@@ -106,11 +130,13 @@ export default function ScrollRiver({ sectionIds, children }) {
     const height = wrapper.offsetHeight;
     if (!width || !height) return;
 
+    const tuning = isMobile ? MOBILE_TUNING : DESKTOP_TUNING;
+
     const centerX = width / 2;
-    const amplitude = width * AMPLITUDE_RATIO;
+    const amplitude = width * tuning.amplitudeRatio;
     const wavelengths = sectionIds.length * WAVELENGTHS_PER_SECTION;
     const points = generateWavePoints(height, centerX, amplitude, wavelengths, SAMPLE_SPACING);
-    const riverWidth = clampRiverWidth(width);
+    const riverWidth = clampRiverWidth(width, tuning);
 
     const wrapperTop = wrapper.getBoundingClientRect().top + window.scrollY;
     const boundaries = sectionIds.map((id) => {
@@ -141,14 +167,17 @@ export default function ScrollRiver({ sectionIds, children }) {
       const idx = Math.round(((i + 1) / (cloudCount + 1)) * (points.length - 1));
       const point = points[idx];
       const side = i % 2 === 0 ? 1 : -1;
-      return { x: point.x + side * riverWidth * 0.4, y: point.y, scale: CLOUD_SCALES[i % CLOUD_SCALES.length] };
+      return {
+        x: point.x + side * riverWidth * 0.4,
+        y: point.y,
+        scale: CLOUD_SCALES[i % CLOUD_SCALES.length] * tuning.cloudScale,
+      };
     });
 
-    setGeometry({ width, height, points, segments, centerlineD, clouds, riverWidth });
-  }, [sectionIds]);
+    setGeometry({ width, height, points, segments, centerlineD, clouds, riverWidth, tuning });
+  }, [sectionIds, isMobile]);
 
   useEffect(() => {
-    if (!isDesktop) return undefined;
     measure();
 
     const ro = new ResizeObserver(() => measure());
@@ -159,10 +188,10 @@ export default function ScrollRiver({ sectionIds, children }) {
       ro.disconnect();
       window.removeEventListener("resize", measure);
     };
-  }, [isDesktop, measure]);
+  }, [measure]);
 
   useEffect(() => {
-    if (!isDesktop || !geometry) return undefined;
+    if (!geometry) return undefined;
 
     let ticking = false;
 
@@ -196,7 +225,7 @@ export default function ScrollRiver({ sectionIds, children }) {
     updateBoat();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, [isDesktop, geometry]);
+  }, [geometry]);
 
   const fadeHalfRange = boat.viewportH * FADE_HALF_RANGE_RATIO;
   const fadeY1 = boat.y - fadeHalfRange;
@@ -204,7 +233,7 @@ export default function ScrollRiver({ sectionIds, children }) {
 
   return (
     <div ref={wrapperRef} className="relative">
-      {isDesktop && geometry && (
+      {geometry && (
         <svg
           className="absolute inset-0 z-30 pointer-events-none"
           width="100%"
@@ -235,7 +264,7 @@ export default function ScrollRiver({ sectionIds, children }) {
                   strokeWidth={geometry.riverWidth}
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  opacity="0.55"
+                  opacity={geometry.tuning.riverOpacity}
                 />
                 <path
                   d={seg.centerD}
@@ -244,14 +273,14 @@ export default function ScrollRiver({ sectionIds, children }) {
                   strokeWidth={geometry.riverWidth * HIGHLIGHT_WIDTH_RATIO}
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  opacity="0.4"
+                  opacity={geometry.tuning.highlightOpacity}
                 />
               </g>
             ))}
           </g>
 
           <path ref={svgPathRef} d={geometry.centerlineD} fill="none" stroke="none" />
-          <Boat x={boat.x} y={boat.y} angle={boat.angle} />
+          <Boat x={boat.x} y={boat.y} angle={boat.angle} scale={geometry.tuning.boatScale} />
 
           {geometry.clouds.map((cloud, i) => (
             <Cloud key={i} x={cloud.x} y={cloud.y} seed={i} scale={cloud.scale} />
