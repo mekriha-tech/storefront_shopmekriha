@@ -375,8 +375,11 @@ export default function Home() {
         </header>
 
         <ScrollRiver sectionIds={["home", "about", "produce", "visit", "produce-explore"]}>
+        {(riverLayer) => (
+        <>
         {/* Hero Section */}
         <section id="home" className="relative overflow-hidden min-h-[82vh] bg-gradient-to-br from-[#FAF8F5] via-[#FAF8F5] to-[#F3EEE5] flex items-center">
+          {riverLayer("home")}
           {/* Full-width Hero Image */}
           <div className="absolute inset-y-0 right-0 w-[100vw] lg:w-[100vw] xl:w-[100vw] pointer-events-none z-0">
             <Image
@@ -435,6 +438,7 @@ export default function Home() {
 
         {/* Section 2: Growing Stronger, Together */}
         <section id="about" className="relative overflow-hidden min-h-[82vh] border-t border-gray-100 bg-[#005748] text-[#FAF6D9] flex items-center">
+          {riverLayer("about")}
           {/* Mirrored Left-aligned Artwork matching Section 1 structure */}
           <div className="absolute inset-y-0 left-0 w-[100vw] lg:w-[100vw] xl:w-[100vw] pointer-events-none z-0">
             <Image
@@ -529,8 +533,9 @@ export default function Home() {
 
         {/* Section 3: Know Your Crop Journey */}
         <section id="produce" className="bg-[#FAF8F5] py-20 md:py-28 border-t border-gray-100 relative z-20">
-          <div className="max-w-7xl mx-auto px-6">
-            
+          {riverLayer("produce")}
+          <div className="relative z-10 max-w-7xl mx-auto px-6">
+
             {/* Header Content */}
             <div className="max-w-3xl mx-auto text-center mb-16 md:mb-20">
               <span className={`inline-flex items-center gap-1.5 py-1 px-3.5 rounded-full text-xs font-bold bg-[#005748]/10 text-[#005748] border border-[#005748]/20 uppercase tracking-widest mb-6 ${fontClass}`}>
@@ -623,6 +628,7 @@ export default function Home() {
 
         {/* Section 4: Visit the Farm */}
         <section id="visit" className="relative overflow-hidden min-h-[80vh] bg-[#005748] text-[#FAF6D9] flex items-center py-20 md:py-28 border-t border-gray-100">
+          {riverLayer("visit")}
           <div className="relative z-10 max-w-7xl mx-auto px-6 w-full">
             <div className="grid md:grid-cols-12 gap-12 items-center">
               {/* Left Column: Text Content */}
@@ -668,8 +674,9 @@ export default function Home() {
 
         {/* Section 5: Explore Our Produce */}
         <section id="produce-explore" className="bg-[#FAF8F5] py-20 md:py-28 border-t border-gray-100 relative z-20">
-          <div className="max-w-7xl mx-auto px-6">
-            
+          {riverLayer("produce-explore")}
+          <div className="relative z-10 max-w-7xl mx-auto px-6">
+
             {/* Header Content */}
             <div className="max-w-3xl mx-auto text-center mb-16 md:mb-20">
               <span className={`inline-flex items-center gap-1.5 py-1 px-3.5 rounded-full text-xs font-bold bg-[#005748]/10 text-[#005748] border border-[#005748]/20 uppercase tracking-widest mb-6 ${fontClass}`}>
@@ -772,6 +779,8 @@ export default function Home() {
 
           </div>
         </section>
+        </>
+        )}
         </ScrollRiver>
 
         {/* Expanded Premium Footer */}
