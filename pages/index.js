@@ -256,10 +256,15 @@ export default function Home() {
         <header className="w-full sticky top-0 bg-[#FAF8F5]/85 backdrop-blur-md z-50 border-b border-gray-100 transition-all duration-300">
           <div className="max-w-7xl mx-auto px-6 py-5 md:py-6 flex items-center justify-between">
             {/* Logo */}
-            <Link href="/" className="flex items-center">
-              <span className={`${calSansHeading.className} font-bold text-2xl md:text-3xl tracking-tight text-[#005748] hover:opacity-90 transition-opacity uppercase`}>
-                Logo
-              </span>
+            <Link href="/" className="flex items-center hover:opacity-90 transition-opacity">
+              <Image
+                src="/mekriha_logo.png"
+                alt="Mekriha"
+                width={160}
+                height={34}
+                priority
+                className="h-7 md:h-8 w-auto"
+              />
             </Link>
 
             {/* Desktop Navigation Links */}
@@ -789,9 +794,13 @@ export default function Home() {
             
             {/* Column 1: Brand & Tagline */}
             <div className="md:col-span-4 flex flex-col items-start text-left">
-              <span className={`${calSansHeading.className} font-bold text-2xl tracking-tight text-[#005748] uppercase mb-4`}>
-                Mekriha
-              </span>
+              <Image
+                src="/mekriha_logo.png"
+                alt="Mekriha"
+                width={160}
+                height={34}
+                className="h-7 w-auto mb-4"
+              />
               <p className={`font-semibold text-gray-900 mb-1 ${fontClass}`}>
                 {t.footer.brand}
               </p>
