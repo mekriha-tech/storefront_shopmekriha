@@ -256,10 +256,15 @@ export default function Home() {
         <header className="w-full sticky top-0 bg-[#FAF8F5]/85 backdrop-blur-md z-50 border-b border-gray-100 transition-all duration-300">
           <div className="max-w-7xl mx-auto px-6 py-5 md:py-6 flex items-center justify-between">
             {/* Logo */}
-            <Link href="/" className="flex items-center">
-              <span className={`${calSansHeading.className} font-bold text-2xl md:text-3xl tracking-tight text-[#005748] hover:opacity-90 transition-opacity uppercase`}>
-                Logo
-              </span>
+            <Link href="/" className="flex items-center hover:opacity-90 transition-opacity">
+              <Image
+                src={lang === "as" ? "/mekriha_assamese_logo.PNG" : "/mekriha_logo.png"}
+                alt="Mekriha"
+                width={160}
+                height={34}
+                priority
+                className="h-7 md:h-8 w-auto"
+              />
             </Link>
 
             {/* Desktop Navigation Links */}
@@ -481,9 +486,9 @@ export default function Home() {
                       <div className="w-16 h-16 rounded-full border border-dashed border-white/20 animate-pulse"></div>
                     </div>
                   ) : (
-                    <div className="flex items-start justify-center md:justify-start gap-6 lg:gap-8 flex-wrap w-full">
+                    <div className="flex items-start justify-start gap-6 lg:gap-8 overflow-x-auto flex-nowrap snap-x snap-mandatory -mx-6 px-6 pb-2 md:flex-wrap md:overflow-visible md:mx-0 md:px-0 md:pb-0 md:snap-none w-full [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                       {farms.slice(0, 3).map((farm) => (
-                        <Link href={`/farms/${farm.id}`} key={farm.id} className="group flex flex-col items-center gap-2 max-w-[100px] transition-all">
+                        <Link href={`/farms/${farm.id}`} key={farm.id} className="group flex flex-col items-center gap-2 max-w-[100px] shrink-0 snap-start transition-all">
                           {/* Sleek Circular Glass Logo Badge */}
                           <div className="w-20 h-20 rounded-full border border-white/15 bg-white/5 backdrop-blur-md group-hover:translate-y-[-6px] group-hover:border-[#FCD02C] group-hover:shadow-[0_0_20px_rgba(252,208,44,0.3)] transition-all duration-300 flex items-center justify-center overflow-hidden relative p-1 shrink-0">
                             <div className="w-full h-full relative rounded-full overflow-hidden bg-white/95">
@@ -503,7 +508,7 @@ export default function Home() {
                       ))}
 
                       {/* Explore All Farms Circle */}
-                      <Link href="/farms" className="group flex flex-col items-center gap-2 max-w-[100px] transition-all">
+                      <Link href="/farms" className="group flex flex-col items-center gap-2 max-w-[100px] shrink-0 snap-start transition-all">
                         <div className="w-20 h-20 rounded-full border border-dashed border-white/35 bg-white/5 hover:bg-white/10 group-hover:translate-y-[-6px] group-hover:border-[#FCD02C] group-hover:shadow-[0_0_20px_rgba(252,208,44,0.3)] transition-all duration-300 flex items-center justify-center overflow-hidden relative shrink-0">
                           <span className="text-white group-hover:text-[#FCD02C] font-bold text-2xl">→</span>
                         </div>
@@ -558,10 +563,10 @@ export default function Home() {
               <div className="absolute top-10 left-12 right-12 h-0.5 border-t border-dashed border-gray-300 z-0 hidden md:block" />
 
               {/* Steps Layout */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8 relative z-10">
-                
+              <div className="flex flex-nowrap overflow-x-auto gap-6 snap-x snap-mandatory -mx-6 px-6 pb-4 md:grid md:grid-cols-4 md:gap-8 md:overflow-visible md:mx-0 md:px-0 md:pb-0 md:snap-none relative z-10 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+
                 {/* Step 1: Cultivation */}
-                <div className="group flex flex-col items-center text-center">
+                <div className="group flex flex-col items-center text-center w-[220px] shrink-0 snap-start md:w-auto md:shrink">
                   <div className="w-20 h-20 rounded-full border border-gray-200 bg-white hover:border-[#005748] hover:shadow-lg hover:scale-105 transition-all duration-300 flex items-center justify-center shadow-sm relative z-10 shrink-0">
                     <svg className="w-8 h-8 text-[#005748]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M12 22V10M12 10a5 5 0 0 1 5-5M12 14a5 5 0 0 0-5-5"></path>
@@ -576,7 +581,7 @@ export default function Home() {
                 </div>
 
                 {/* Step 2: Harvest */}
-                <div className="group flex flex-col items-center text-center">
+                <div className="group flex flex-col items-center text-center w-[220px] shrink-0 snap-start md:w-auto md:shrink">
                   <div className="w-20 h-20 rounded-full border border-gray-200 bg-white hover:border-[#005748] hover:shadow-lg hover:scale-105 transition-all duration-300 flex items-center justify-center shadow-sm relative z-10 shrink-0">
                     <svg className="w-8 h-8 text-[#005748]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M2 22c5-5 15-5 20 0M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
@@ -591,7 +596,7 @@ export default function Home() {
                 </div>
 
                 {/* Step 3: Packaging */}
-                <div className="group flex flex-col items-center text-center">
+                <div className="group flex flex-col items-center text-center w-[220px] shrink-0 snap-start md:w-auto md:shrink">
                   <div className="w-20 h-20 rounded-full border border-gray-200 bg-white hover:border-[#005748] hover:shadow-lg hover:scale-105 transition-all duration-300 flex items-center justify-center shadow-sm relative z-10 shrink-0">
                     <svg className="w-8 h-8 text-[#005748]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
@@ -606,7 +611,7 @@ export default function Home() {
                 </div>
 
                 {/* Step 4: Delivery */}
-                <div className="group flex flex-col items-center text-center">
+                <div className="group flex flex-col items-center text-center w-[220px] shrink-0 snap-start md:w-auto md:shrink">
                   <div className="w-20 h-20 rounded-full border border-gray-200 bg-white hover:border-[#005748] hover:shadow-lg hover:scale-105 transition-all duration-300 flex items-center justify-center shadow-sm relative z-10 shrink-0">
                     <svg className="w-8 h-8 text-[#005748]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zm12 0a2 2 0 11-4 0 2 2 0 014 0m-2-3H5m14 0V8a2 2 0 00-2-2h-3m4 8h-4m0 0V6m0 8H9m0 0V9a2 2 0 00-2-2H4"></path>
@@ -789,9 +794,13 @@ export default function Home() {
             
             {/* Column 1: Brand & Tagline */}
             <div className="md:col-span-4 flex flex-col items-start text-left">
-              <span className={`${calSansHeading.className} font-bold text-2xl tracking-tight text-[#005748] uppercase mb-4`}>
-                Mekriha
-              </span>
+              <Image
+                src={lang === "as" ? "/mekriha_assamese_logo.PNG" : "/mekriha_logo.png"}
+                alt="Mekriha"
+                width={160}
+                height={34}
+                className="h-7 w-auto mb-4"
+              />
               <p className={`font-semibold text-gray-900 mb-1 ${fontClass}`}>
                 {t.footer.brand}
               </p>
