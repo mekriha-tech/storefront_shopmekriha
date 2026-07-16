@@ -401,7 +401,7 @@ export default function Home() {
           <div className="relative z-10 max-w-7xl mx-auto px-6 w-full py-12 md:py-20">
             <div className="grid md:grid-cols-12 items-center">
               {/* Left Column */}
-              <div className="md:col-span-7 flex flex-col items-start">
+              <div className="md:col-start-2 md:col-span-4 lg:col-start-2 lg:col-span-4 flex flex-col items-start">
                 {/* Modern Pill Badge */}
                 <span className={`inline-flex items-center gap-1.5 py-1 px-3.5 rounded-full text-xs font-bold bg-[#005748]/10 text-[#005748] border border-[#005748]/20 uppercase tracking-widest mb-6 ${fontClass}`}>
                   {t.hero.pill}
@@ -411,7 +411,7 @@ export default function Home() {
                   {t.hero.title}
                 </h1>
 
-                <p className={`text-gray-600 text-sm sm:text-base md:text-lg leading-[1.65] mt-6 max-w-xl font-normal ${fontClass}`}>
+                <p className={`text-gray-600 text-sm sm:text-base md:text-lg leading-[1.65] mt-6 max-w-[28rem] font-normal ${fontClass}`}>
                   {t.hero.description}
                 </p>
 
@@ -460,7 +460,7 @@ export default function Home() {
           <div className="relative z-10 max-w-7xl mx-auto px-6 w-full py-16 md:py-24">
             <div className="grid md:grid-cols-12 items-center">
               {/* Right Column: Text and Logo section matching Section 1 grid width but on the right */}
-              <div className="md:col-start-6 md:col-span-7 flex flex-col justify-center items-start text-left">
+              <div className="md:col-start-8 md:col-span-4 lg:col-start-9 lg:col-span-4 flex flex-col justify-center items-start text-left lg:mr-6">
                 {/* Modern Pill Badge */}
                 <span className={`inline-flex items-center gap-1.5 py-1 px-3.5 rounded-full text-xs font-bold bg-[#005748]/10 text-[#005748] border border-[#005748]/20 uppercase tracking-widest mb-6 ${fontClass}`}>
                   {t.section2.pill}
@@ -470,7 +470,7 @@ export default function Home() {
                   {t.section2.title}
                 </h2>
 
-                <p className={`text-gray-600 text-sm sm:text-base leading-[1.65] mt-4 max-w-xl font-normal ${fontClass}`}>
+                <p className={`text-gray-600 text-sm sm:text-base leading-[1.65] mt-4 max-w-[28rem] font-normal ${fontClass}`}>
                   {t.section2.description}
                 </p>
 
