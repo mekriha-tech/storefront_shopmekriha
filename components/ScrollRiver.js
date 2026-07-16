@@ -1,40 +1,48 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { generateWavePoints, pointsToSmoothPath, splitPointsBySection } from "./riverPath";
 
-const CLOUD_SCALES = [1, 0.6, 1.45, 0.85, 1.15, 0.7];
+const CLOUD_SCALES = [1, 1.8, 0.6, 1.45, 2, 0.85, 1.15, 0.7, 1.6];
 
-const SECTION_BG = {
-  home: "cream",
-  about: "cream",
-  produce: "cream",
-  visit: "cream",
-  "produce-explore": "cream",
-};
+// Gradient stops for the water fill, giving the river some tonal
+// variance down its length instead of one flat color. Kept within the
+// #14bca6 teal-green family.
+const RIVER_WATER_GRADIENT_STOPS = ["#0E8F7D", "#14BCA6", "#0B7566", "#3ED9C0"];
+const RIVER_HIGHLIGHT_COLOR = "#CFF5EC";
+const HIGHLIGHT_WIDTH_RATIO = 0.35; // fraction of river width
+const RIVER_OPACITY = 0.8; // dims the water fill so it reads as more subtle/decorative
+const RIVER_LABEL = "BRAHMAPUTRA RIVER";
+const RIVER_LABEL_COLOR = "#111111";
+const RIVER_LABEL_OUTLINE_COLOR = "#FFFFFF";
 
-const RIVER_ON_CREAM = "#005748";
-const BANK_ON_CREAM = "#F3EEE5";
-const RIVER_ON_GREEN = "#FAF6D9";
-const BANK_ON_GREEN = "#0A6B5A";
+const RIPPLE_SAMPLE_STRIDE = 3; // draw a ripple mark every Nth wave sample
+const RIPPLE_COLOR = "#EAFBF7";
 
 const WAVELENGTHS_PER_SECTION = 1;
 const SAMPLE_SPACING = 40; // px
-const HIGHLIGHT_WIDTH_RATIO = 0.35; // fraction of river width
 
-const CLOUD_COUNT = 6;
-const ROTATION_DAMPING = 0.35; // subtler tilt for the top-down boat
-const FADE_HALF_RANGE_RATIO = 0.55; // fraction of viewport height, clear zone around the boat
-const FAR_SECTION_OPACITY_RATIO = 0.4; // flat dimming for sections far from the boat
+const CLOUD_COUNT = 10;
+// boat.svg's nose points "up" (north) at rest; the tangent angle returned
+// by atan2 is measured from due east, so it needs a +90deg correction to
+// align the nose with the direction of travel.
+const BOAT_HEADING_OFFSET = 90;
+const BOAT_ART_SCALE = 0.55; // shrink boat.svg's 80x140 viewBox down
 
-const MOBILE_BREAKPOINT = "(max-width: 767px)";
+// Below this, sections stack as one full-width column (river runs wide
+// behind the text). At and above it — including the "tablet" range below
+// Tailwind's md breakpoint — content splits into two columns flanking a
+// narrower gutter river, so this must line up with the pages/index.js
+// breakpoint that introduces that split (currently `min-[600px]:`).
+const MOBILE_BREAKPOINT = "(max-width: 599px)";
 
 // Desktop: river winds through the gutter between two-column content.
+// Kept narrow enough that its swing stays inside the middle grid columns
+// the two-column sections leave clear (see pages/index.js's "about" and
+// "visit" sections), instead of sweeping into the text/card columns.
 const DESKTOP_TUNING = {
-  amplitudeRatio: 0.15,
+  amplitudeRatio: 0.12,
   riverWidthRatio: 0.075,
   riverWidthMin: 70,
   riverWidthMax: 120,
-  riverOpacity: 0.55,
-  highlightOpacity: 0.4,
   boatScale: 1,
   cloudScale: 1,
 };
@@ -47,46 +55,40 @@ const MOBILE_TUNING = {
   riverWidthRatio: 0.4,
   riverWidthMin: 50,
   riverWidthMax: 130,
-  riverOpacity: 0.4,
-  highlightOpacity: 0.28,
   boatScale: 0.65,
   cloudScale: 0.7,
 };
-
-function strokeColorFor(bg) {
-  return bg === "green" ? RIVER_ON_GREEN : RIVER_ON_CREAM;
-}
-
-function bankColorFor(bg) {
-  return bg === "green" ? BANK_ON_GREEN : BANK_ON_CREAM;
-}
 
 function clampRiverWidth(width, tuning) {
   return Math.max(tuning.riverWidthMin, Math.min(tuning.riverWidthMax, width * tuning.riverWidthRatio));
 }
 
+const BOAT_WIDTH = 80 * BOAT_ART_SCALE;
+const BOAT_HEIGHT = 140 * BOAT_ART_SCALE;
+
 function Boat({ x, y, angle, scale }) {
   return (
-    <g style={{ transform: `translate(${x}px, ${y}px) rotate(${angle}deg) scale(${scale})`, transformOrigin: "0 0" }}>
-      <g className="river-boat-bob">
-        {/* Outer hull rim */}
-        <path
-          d="M0,-24 C9,-24 13,-9 13,0 C13,11 9,24 0,24 C-9,24 -13,11 -13,0 C-13,-9 -9,-24 0,-24 Z"
-          fill="#F3E3C3"
-          stroke="#5C3A1E"
-          strokeWidth="1"
-        />
-        {/* Inner planked hull */}
-        <path
-          d="M0,-19 C7,-19 10,-8 10,0 C10,9 7,19 0,19 C-7,19 -10,9 -10,0 C-10,-8 -7,-19 0,-19 Z"
-          fill="#8B5A2B"
-        />
-        {/* Plank lines */}
-        <line x1="-8" y1="-8" x2="8" y2="-8" stroke="#5C3A1E" strokeWidth="0.75" opacity="0.55" />
-        <line x1="-9.5" y1="0" x2="9.5" y2="0" stroke="#5C3A1E" strokeWidth="0.75" opacity="0.55" />
-        <line x1="-8" y1="9" x2="8" y2="9" stroke="#5C3A1E" strokeWidth="0.75" opacity="0.55" />
-        {/* Seat */}
-        <rect x="-5.5" y="6" width="11" height="5" rx="2" fill="#EFD9AE" stroke="#5C3A1E" strokeWidth="0.5" />
+    <g style={{ transform: `translate(${x}px, ${y}px)`, transformOrigin: "0 0" }}>
+      {/* Unrotated so the wake ripples stay level with the water regardless of
+          boat heading. Pure CSS loop, so it keeps rippling even while the
+          boat is stationary between scrolls, not just while moving. */}
+      <g className="river-boat-wake" style={{ transform: `scale(${scale})`, transformOrigin: "0 0" }}>
+        <path d="M -22 -5 Q -13 -11 -4 -5" fill="none" stroke={RIPPLE_COLOR} strokeWidth="2.4" strokeLinecap="round" />
+        <path d="M 6 5 Q 16 -2 26 5" fill="none" stroke={RIPPLE_COLOR} strokeWidth="2.4" strokeLinecap="round" />
+        <path d="M -10 15 Q -1 9 8 15" fill="none" stroke={RIPPLE_COLOR} strokeWidth="2.4" strokeLinecap="round" />
+        <path d="M -26 8 Q -18 3 -10 8" fill="none" stroke={RIPPLE_COLOR} strokeWidth="2" strokeLinecap="round" />
+        <path d="M 12 -8 Q 19 -13 26 -8" fill="none" stroke={RIPPLE_COLOR} strokeWidth="2" strokeLinecap="round" />
+      </g>
+      <g style={{ transform: `rotate(${angle}deg) scale(${scale})`, transformOrigin: "0 0" }}>
+        <g className="river-boat-bob">
+          <image
+            href="/boat.svg"
+            x={-BOAT_WIDTH / 2}
+            y={-BOAT_HEIGHT / 2}
+            width={BOAT_WIDTH}
+            height={BOAT_HEIGHT}
+          />
+        </g>
       </g>
     </g>
   );
@@ -103,6 +105,24 @@ function Cloud({ x, y, seed, scale }) {
         <ellipse cx="18" cy="3" rx="18" ry="11" fill="#FFFDF7" opacity="0.92" />
         <ellipse cx="0" cy="6" rx="24" ry="10" fill="#FFFDF7" opacity="0.92" />
       </g>
+    </g>
+  );
+}
+
+// A short curved dash suggesting a ripple crossing the water, rotated to
+// the local flow direction of the wave it's placed on.
+function RippleMark({ x, y, angle, width }) {
+  const len = width * 0.9;
+  return (
+    <g transform={`translate(${x}, ${y}) rotate(${angle})`}>
+      <path
+        d={`M ${-len / 2} 0 Q 0 ${-len * 0.22} ${len / 2} 0`}
+        fill="none"
+        stroke={RIPPLE_COLOR}
+        strokeWidth={Math.max(1.5, width * 0.05)}
+        strokeLinecap="round"
+        opacity="0.5"
+      />
     </g>
   );
 }
@@ -145,12 +165,6 @@ export default function ScrollRiver({ sectionIds, children }) {
 
     const tuning = isMobile ? MOBILE_TUNING : DESKTOP_TUNING;
 
-    const centerX = width / 2;
-    const amplitude = width * tuning.amplitudeRatio;
-    const wavelengths = sectionIds.length * WAVELENGTHS_PER_SECTION;
-    const points = generateWavePoints(height, centerX, amplitude, wavelengths, SAMPLE_SPACING);
-    const riverWidth = clampRiverWidth(width, tuning);
-
     const wrapperTop = wrapper.getBoundingClientRect().top + window.scrollY;
     const boundaries = sectionIds.map((id) => {
       const el = document.getElementById(id);
@@ -159,6 +173,15 @@ export default function ScrollRiver({ sectionIds, children }) {
     });
     boundaries[0] = 0;
 
+    const centerX = width / 2;
+    const amplitude = width * tuning.amplitudeRatio;
+    const wavelengths = sectionIds.length * WAVELENGTHS_PER_SECTION;
+    // Force an exact sample at every internal section boundary so each
+    // section's independently-smoothed local curve starts/ends precisely
+    // at its own edge instead of falling short and creating a seam.
+    const points = generateWavePoints(height, centerX, amplitude, wavelengths, SAMPLE_SPACING, boundaries.slice(1));
+    const riverWidth = clampRiverWidth(width, tuning);
+
     // Each segment's centerline is rendered as a thick STROKE (not an
     // offset-polygon ribbon) so the river band stays mathematically
     // centered on the exact curve the boat travels along. `centerD`
@@ -166,18 +189,50 @@ export default function ScrollRiver({ sectionIds, children }) {
     // path); `localD` is the same curve shifted so y=0 is that
     // section's own top, for rendering inside the section itself.
     const rawSegments = splitPointsBySection(points, boundaries);
+    // How far past each section's own edge to keep drawing the visible
+    // stroke. Without this, the path's round line-cap lands exactly on
+    // the section's clip edge and gets flattened into a visible straight
+    // "cut" across the river instead of continuing into the next section
+    // (which is drawing its own overdraw over the same spot).
+    const overdrawMargin = riverWidth;
     const segments = rawSegments.map((segPoints, i) => {
-      const bg = SECTION_BG[sectionIds[i]] || "cream";
       const top = boundaries[i];
       const bottom = i + 1 < boundaries.length ? boundaries[i + 1] : height;
-      const localPoints = segPoints.map((p) => ({ x: p.x, y: p.y - top }));
+
+      const prevSeg = i > 0 ? rawSegments[i - 1] : null;
+      const nextSeg = i + 1 < rawSegments.length ? rawSegments[i + 1] : null;
+      const leadIn = prevSeg ? prevSeg.filter((p) => p.y < top && p.y >= top - overdrawMargin) : [];
+      const trailOut = nextSeg ? nextSeg.filter((p) => p.y > bottom && p.y <= bottom + overdrawMargin) : [];
+      const overdrawPoints = [...leadIn, ...segPoints, ...trailOut];
+      const localPoints = overdrawPoints.map((p) => ({ x: p.x, y: p.y - top }));
+
+      // Place the river-name label near a peak/trough of the wave (where
+      // the curve runs closest to straight down) rather than blindly at
+      // the segment's midpoint — a zero-crossing has the steepest sideways
+      // tangent and makes the label read crooked or backwards.
+      let labelIndex = Math.floor(segPoints.length / 2);
+      if (segPoints.length > 4) {
+        const lo = Math.floor(segPoints.length * 0.25);
+        const hi = Math.ceil(segPoints.length * 0.75);
+        let flattest = Infinity;
+        for (let p = lo; p < hi; p++) {
+          const prev = segPoints[p - 1] || segPoints[p];
+          const next = segPoints[p + 1] || segPoints[p];
+          const dx = Math.abs(next.x - prev.x);
+          if (dx < flattest) {
+            flattest = dx;
+            labelIndex = p;
+          }
+        }
+      }
+      const labelOffsetPercent = segPoints.length > 1 ? (labelIndex / (segPoints.length - 1)) * 100 : 50;
+
       return {
         centerD: pointsToSmoothPath(segPoints),
         localD: pointsToSmoothPath(localPoints),
-        color: strokeColorFor(bg),
-        bankColor: bankColorFor(bg),
         top,
         height: Math.max(1, bottom - top),
+        labelOffsetPercent,
       };
     });
 
@@ -207,7 +262,23 @@ export default function ScrollRiver({ sectionIds, children }) {
       };
     });
 
-    setGeometry({ width, height, segments, centerlineD, clouds, riverWidth, tuning, sectionIndexForY });
+    const ripples = [];
+    for (let i = 1; i < points.length - 1; i += RIPPLE_SAMPLE_STRIDE) {
+      const point = points[i];
+      const prev = points[i - 1];
+      const next = points[i + 1];
+      const angle = (Math.atan2(next.y - prev.y, next.x - prev.x) * 180) / Math.PI;
+      const sectionIndex = sectionIndexForY(point.y);
+      const side = Math.floor(i / RIPPLE_SAMPLE_STRIDE) % 2 === 0 ? 1 : -1;
+      ripples.push({
+        x: point.x + side * riverWidth * 0.18,
+        localY: point.y - segments[sectionIndex].top,
+        angle,
+        sectionIndex,
+      });
+    }
+
+    setGeometry({ width, height, segments, centerlineD, clouds, ripples, riverWidth, tuning, sectionIndexForY });
   }, [sectionIds, isMobile]);
 
   useEffect(() => {
@@ -244,7 +315,7 @@ export default function ScrollRiver({ sectionIds, children }) {
       const point = pathEl.getPointAtLength(progress * totalLength);
       const ahead = pathEl.getPointAtLength(Math.min(totalLength, progress * totalLength + 1));
       const rawAngle = (Math.atan2(ahead.y - point.y, ahead.x - point.x) * 180) / Math.PI;
-      const angle = rawAngle * ROTATION_DAMPING;
+      const angle = rawAngle + BOAT_HEADING_OFFSET;
 
       setBoat({ x: point.x, y: point.y, angle, viewportH, sectionIndex: geometry.sectionIndexForY(point.y) });
     };
@@ -268,11 +339,9 @@ export default function ScrollRiver({ sectionIds, children }) {
       if (idx === -1) return null;
 
       const seg = geometry.segments[idx];
-      const fadeHalfRange = boat.viewportH * FADE_HALF_RANGE_RATIO;
-      const nearBoat = boat.y + fadeHalfRange >= seg.top && boat.y - fadeHalfRange <= seg.top + seg.height;
       const localBoatY = boat.y - seg.top;
-      const gradId = `riverFade-${sectionId}`;
-      const maskId = `riverMask-${sectionId}`;
+      const pathId = `riverCenterline-${sectionId}`;
+      const gradientId = `riverWater-${sectionId}`;
 
       return (
         <svg
@@ -283,69 +352,63 @@ export default function ScrollRiver({ sectionIds, children }) {
           preserveAspectRatio="none"
           aria-hidden="true"
         >
-          {nearBoat ? (
-            <>
-              <defs>
-                <linearGradient
-                  id={gradId}
-                  gradientUnits="userSpaceOnUse"
-                  x1="0"
-                  y1={localBoatY - fadeHalfRange}
-                  x2="0"
-                  y2={localBoatY + fadeHalfRange}
-                >
-                  <stop offset="0%" stopColor="#fff" stopOpacity="0" />
-                  <stop offset="30%" stopColor="#fff" stopOpacity="1" />
-                  <stop offset="70%" stopColor="#fff" stopOpacity="1" />
-                  <stop offset="100%" stopColor="#fff" stopOpacity="0" />
-                </linearGradient>
-                <mask id={maskId}>
-                  <rect x="0" y="0" width={geometry.width} height={seg.height} fill={`url(#${gradId})`} />
-                </mask>
-              </defs>
-              <g mask={`url(#${maskId})`}>
-                <path
-                  d={seg.localD}
-                  fill="none"
-                  stroke={seg.color}
-                  strokeWidth={geometry.riverWidth}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  opacity={geometry.tuning.riverOpacity}
-                />
-                <path
-                  d={seg.localD}
-                  fill="none"
-                  stroke={seg.bankColor}
-                  strokeWidth={geometry.riverWidth * HIGHLIGHT_WIDTH_RATIO}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  opacity={geometry.tuning.highlightOpacity}
-                />
-              </g>
-            </>
-          ) : (
-            <g>
-              <path
-                d={seg.localD}
-                fill="none"
-                stroke={seg.color}
-                strokeWidth={geometry.riverWidth}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                opacity={geometry.tuning.riverOpacity * FAR_SECTION_OPACITY_RATIO}
-              />
-              <path
-                d={seg.localD}
-                fill="none"
-                stroke={seg.bankColor}
-                strokeWidth={geometry.riverWidth * HIGHLIGHT_WIDTH_RATIO}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                opacity={geometry.tuning.highlightOpacity * FAR_SECTION_OPACITY_RATIO}
-              />
-            </g>
-          )}
+          <defs>
+            {/* y1/y2 are offset by this section's own top so every section
+                samples the same conceptual gradient spanning the full page
+                height — otherwise each section's gradient restarts from
+                0%, creating a visible color jump at every seam. */}
+            <linearGradient
+              id={gradientId}
+              gradientUnits="userSpaceOnUse"
+              x1="0"
+              y1={-seg.top}
+              x2="0"
+              y2={geometry.height - seg.top}
+            >
+              {RIVER_WATER_GRADIENT_STOPS.map((color, i) => (
+                <stop key={color} offset={`${(i / (RIVER_WATER_GRADIENT_STOPS.length - 1)) * 100}%`} stopColor={color} />
+              ))}
+            </linearGradient>
+          </defs>
+          <path
+            id={pathId}
+            d={seg.localD}
+            fill="none"
+            stroke={`url(#${gradientId})`}
+            strokeWidth={geometry.riverWidth}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            opacity={RIVER_OPACITY}
+          />
+          <path
+            d={seg.localD}
+            fill="none"
+            stroke={RIVER_HIGHLIGHT_COLOR}
+            strokeWidth={geometry.riverWidth * HIGHLIGHT_WIDTH_RATIO}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            opacity="0.5"
+          />
+
+          {geometry.ripples
+            .filter((ripple) => ripple.sectionIndex === idx)
+            .map((ripple, i) => (
+              <RippleMark key={i} x={ripple.x} y={ripple.localY} angle={ripple.angle} width={geometry.riverWidth} />
+            ))}
+
+          <text
+            fontSize={geometry.riverWidth * 0.13}
+            fontWeight="700"
+            letterSpacing="1"
+            fill={RIVER_LABEL_COLOR}
+            stroke={RIVER_LABEL_OUTLINE_COLOR}
+            strokeWidth={geometry.riverWidth * 0.015}
+            paintOrder="stroke"
+          >
+            <textPath href={`#${pathId}`} startOffset={`${seg.labelOffsetPercent}%`} textAnchor="middle">
+              {RIVER_LABEL}
+            </textPath>
+          </text>
 
           {boat.sectionIndex === idx && (
             <Boat x={boat.x} y={localBoatY} angle={boat.angle} scale={geometry.tuning.boatScale} />
