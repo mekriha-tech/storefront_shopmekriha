@@ -2,17 +2,28 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { generateWavePoints, pointsToSmoothPath, splitPointsBySection } from "./riverPath";
 
 const CLOUD_SCALES = [1, 1.8, 0.6, 1.45, 2, 0.85, 1.15, 0.7, 1.6];
+// Every third cloud (by seed) uses the grey palette instead of white, for variety.
+const CLOUD_COLORS_WHITE = ["#FFFFFF", "#FFFDF7", "#FFFDF7", "#FFFDF7"];
+const CLOUD_COLORS_GREY = ["#DDE2E2", "#CBD1D1", "#CBD1D1", "#CBD1D1"];
+
+// ---------------------------------------------------------------------
+// TRANSPARENCY — adjust these two to fade the river or the boat in/out.
+// Both are plain 0 (invisible) to 1 (fully opaque) values.
+const RIVER_OPACITY = 0.6;
+const BOAT_OPACITY = 1;
+// ---------------------------------------------------------------------
 
 // Gradient stops for the water fill, giving the river some tonal
 // variance down its length instead of one flat color. Kept within the
 // #14bca6 teal-green family.
 const RIVER_WATER_GRADIENT_STOPS = ["#0E8F7D", "#14BCA6", "#0B7566", "#3ED9C0"];
 const RIVER_HIGHLIGHT_COLOR = "#CFF5EC";
+const RIVER_HIGHLIGHT_OPACITY = 0.4;
 const HIGHLIGHT_WIDTH_RATIO = 0.35; // fraction of river width
-const RIVER_OPACITY = 0.8; // dims the water fill so it reads as more subtle/decorative
 const RIVER_LABEL = "BRAHMAPUTRA RIVER";
 const RIVER_LABEL_COLOR = "#111111";
-const RIVER_LABEL_OUTLINE_COLOR = "#FFFFFF";
+// const RIVER_LABEL_OUTLINE_COLOR = "#FFFFFF";
+const RIVER_LABEL_OUTLINE_COLOR = "";
 
 const RIPPLE_SAMPLE_STRIDE = 3; // draw a ripple mark every Nth wave sample
 const RIPPLE_COLOR = "#EAFBF7";
@@ -20,7 +31,7 @@ const RIPPLE_COLOR = "#EAFBF7";
 const WAVELENGTHS_PER_SECTION = 1;
 const SAMPLE_SPACING = 40; // px
 
-const CLOUD_COUNT = 10;
+const CLOUD_COUNT = 15;
 // boat.svg's nose points "up" (north) at rest; the tangent angle returned
 // by atan2 is measured from due east, so it needs a +90deg correction to
 // align the nose with the direction of travel.
@@ -47,14 +58,16 @@ const DESKTOP_TUNING = {
   cloudScale: 1,
 };
 
-// Mobile: single-column layout, so the river runs full-width behind
-// the text. Bigger amplitude relative to width so the curve actually
-// reads as curvy instead of being masked by a wide straight band.
+// Mobile: single-column layout, so the river runs behind the text rather
+// than in a dedicated gutter. Kept narrow (unlike the old wide full-width
+// band) so it reads as a slim decorative ribbon instead of overwhelming
+// the text; amplitude stays fairly big relative to that narrow width so
+// the curve still reads as curvy.
 const MOBILE_TUNING = {
   amplitudeRatio: 0.24,
-  riverWidthRatio: 0.4,
-  riverWidthMin: 50,
-  riverWidthMax: 130,
+  riverWidthRatio: 0.16,
+  riverWidthMin: 30,
+  riverWidthMax: 60,
   boatScale: 0.65,
   cloudScale: 0.7,
 };
@@ -68,7 +81,7 @@ const BOAT_HEIGHT = 140 * BOAT_ART_SCALE;
 
 function Boat({ x, y, angle, scale }) {
   return (
-    <g style={{ transform: `translate(${x}px, ${y}px)`, transformOrigin: "0 0" }}>
+    <g style={{ transform: `translate(${x}px, ${y}px)`, transformOrigin: "0 0" }} opacity={BOAT_OPACITY}>
       {/* Unrotated so the wake ripples stay level with the water regardless of
           boat heading. Pure CSS loop, so it keeps rippling even while the
           boat is stationary between scrolls, not just while moving. */}
@@ -97,13 +110,14 @@ function Boat({ x, y, angle, scale }) {
 function Cloud({ x, y, seed, scale }) {
   const duration = 12 + (seed % 5) * 2;
   const delay = -((seed % 4) * 3);
+  const [c0, c1, c2, c3] = seed % 3 === 0 ? CLOUD_COLORS_GREY : CLOUD_COLORS_WHITE;
   return (
     <g transform={`translate(${x}, ${y}) scale(${scale})`}>
       <g className="river-cloud-drift" style={{ animationDuration: `${duration}s`, animationDelay: `${delay}s` }}>
-        <ellipse cx="0" cy="-4" rx="20" ry="13" fill="#FFFFFF" opacity="0.95" />
-        <ellipse cx="-18" cy="3" rx="16" ry="10" fill="#FFFDF7" opacity="0.92" />
-        <ellipse cx="18" cy="3" rx="18" ry="11" fill="#FFFDF7" opacity="0.92" />
-        <ellipse cx="0" cy="6" rx="24" ry="10" fill="#FFFDF7" opacity="0.92" />
+        <ellipse cx="0" cy="-4" rx="20" ry="13" fill={c0} opacity="0.95" />
+        <ellipse cx="-18" cy="3" rx="16" ry="10" fill={c1} opacity="0.92" />
+        <ellipse cx="18" cy="3" rx="18" ry="11" fill={c2} opacity="0.92" />
+        <ellipse cx="0" cy="6" rx="24" ry="10" fill={c3} opacity="0.92" />
       </g>
     </g>
   );
@@ -209,11 +223,14 @@ export default function ScrollRiver({ sectionIds, children }) {
       // Place the river-name label near a peak/trough of the wave (where
       // the curve runs closest to straight down) rather than blindly at
       // the segment's midpoint — a zero-crossing has the steepest sideways
-      // tangent and makes the label read crooked or backwards.
-      let labelIndex = Math.floor(segPoints.length / 2);
+      // tangent and makes the label read crooked or backwards. Biased
+      // toward the lower half of the segment, but not right at the very
+      // bottom — too close to the edge and it gets clipped/lost at the
+      // seam between sections.
+      let labelIndex = Math.floor(segPoints.length * 0.6);
       if (segPoints.length > 4) {
-        const lo = Math.floor(segPoints.length * 0.25);
-        const hi = Math.ceil(segPoints.length * 0.75);
+        const lo = Math.floor(segPoints.length * 0.45);
+        const hi = Math.ceil(segPoints.length * 0.7);
         let flattest = Infinity;
         for (let p = lo; p < hi; p++) {
           const prev = segPoints[p - 1] || segPoints[p];
@@ -387,7 +404,7 @@ export default function ScrollRiver({ sectionIds, children }) {
             strokeWidth={geometry.riverWidth * HIGHLIGHT_WIDTH_RATIO}
             strokeLinecap="round"
             strokeLinejoin="round"
-            opacity="0.5"
+            opacity={RIVER_HIGHLIGHT_OPACITY}
           />
 
           {geometry.ripples
@@ -397,16 +414,20 @@ export default function ScrollRiver({ sectionIds, children }) {
             ))}
 
           <text
-            fontSize={geometry.riverWidth * 0.13}
+            fontSize={geometry.riverWidth * 0.1}
             fontWeight="700"
             letterSpacing="1"
             fill={RIVER_LABEL_COLOR}
             stroke={RIVER_LABEL_OUTLINE_COLOR}
             strokeWidth={geometry.riverWidth * 0.015}
             paintOrder="stroke"
+            opacity={0.5}
           >
             <textPath href={`#${pathId}`} startOffset={`${seg.labelOffsetPercent}%`} textAnchor="middle">
-              {RIVER_LABEL}
+              {/* dy on a nested tspan (rather than the textPath itself) is what
+                  reliably shifts text off the centerline in Chromium — this
+                  moves the label toward the right bank instead of dead center. */}
+              <tspan dy={-geometry.riverWidth * 0.22}>{RIVER_LABEL}</tspan>
             </textPath>
           </text>
 
