@@ -668,7 +668,7 @@ export default function Home() {
                 just sitting beside it. */}
             <div className="flex flex-col md:flex-row md:items-center gap-12 md:gap-x-[calc(26vw_+_7rem)]">
               {/* Left: Text Content */}
-              <div className="flex flex-col items-start text-left relative z-10 md:max-w-[26rem] md:shrink-0">
+              <div className="flex flex-col items-start text-left relative z-10 md:flex-1 md:min-w-0 md:max-w-[26rem]">
                 <span className={`inline-flex items-center gap-1.5 py-1 px-3.5 rounded-full text-xs font-bold bg-[#005748]/10 text-[#005748] border border-[#005748]/20 uppercase tracking-widest mb-6 ${fontClass}`}>
                   {t.section4.pill}
                 </span>
@@ -687,7 +687,7 @@ export default function Home() {
               </div>
 
               {/* Right: Visual farm visit card mockup */}
-              <div className="relative w-full md:w-[26rem] md:shrink-0 aspect-[4/3] md:aspect-[3/2] rounded-2xl overflow-hidden border border-gray-200 shadow-xl group">
+              <div className="relative w-full md:flex-1 md:min-w-0 md:max-w-[26rem] aspect-[4/3] md:aspect-[3/2] rounded-2xl overflow-hidden border border-gray-200 shadow-xl group">
                 <Image
                   src="/images/farms/majuli_hero.png"
                   alt="Assam organic tea field visit experience"
