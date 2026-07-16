@@ -500,45 +500,48 @@ export default function Home() {
                 </p>
               </div>
 
-              {/* Right: Clickable circular logo list */}
-              <div className="flex-1 min-w-0 flex flex-col items-start justify-start text-left">
+              {/* Right: Clickable circular logo list — nudged down at narrow widths
+                  into the section's lower half, where the river's S-curve has swung
+                  away from this side (it's closest to this side near the section's
+                  top), tapering off as the wider gutter above md makes it moot. */}
+              <div className="flex-1 min-w-0 flex flex-col items-start justify-start text-left mt-24 min-[420px]:mt-28 sm:mt-16 md:mt-0">
                 <span className={`${calSansHeading.className} ${fontClass} text-base min-[420px]:text-xl md:text-2xl text-gray-900 block mb-6 tracking-tight font-bold`}>
                   {t.section2.partnerFarms}
                 </span>
                 {loading ? (
-                  <div className="flex gap-4">
-                    <div className="w-16 h-16 rounded-full border border-dashed border-gray-300 animate-pulse"></div>
-                    <div className="w-16 h-16 rounded-full border border-dashed border-gray-300 animate-pulse"></div>
-                    <div className="w-16 h-16 rounded-full border border-dashed border-gray-300 animate-pulse"></div>
+                  <div className="flex flex-wrap gap-4 w-full">
+                    <div className="w-14 h-14 rounded-full border border-dashed border-gray-300 animate-pulse"></div>
+                    <div className="w-14 h-14 rounded-full border border-dashed border-gray-300 animate-pulse"></div>
+                    <div className="w-14 h-14 rounded-full border border-dashed border-gray-300 animate-pulse"></div>
                   </div>
                 ) : (
-                  <div className="flex items-start justify-start gap-4 lg:gap-8 overflow-x-auto flex-nowrap snap-x snap-mandatory pb-2 w-full [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                  <div className="flex flex-wrap items-start gap-x-4 gap-y-5 w-full">
                     {farms.slice(0, 3).map((farm) => (
-                      <Link href={`/farms/${farm.id}`} key={farm.id} className="group flex flex-col items-center gap-2 max-w-[100px] shrink-0 snap-start transition-all">
+                      <Link href={`/farms/${farm.id}`} key={farm.id} className="group flex flex-col items-center gap-2 w-14 min-[420px]:w-16 shrink-0 transition-all">
                         {/* Sleek Circular Glass Logo Badge */}
-                        <div className="w-14 h-14 min-[420px]:w-20 min-[420px]:h-20 rounded-full border border-gray-200 bg-white shadow-sm group-hover:translate-y-[-6px] group-hover:border-[#005748] group-hover:shadow-lg transition-all duration-300 flex items-center justify-center overflow-hidden relative p-1 shrink-0">
+                        <div className="w-12 h-12 min-[420px]:w-14 min-[420px]:h-14 rounded-full border border-gray-200 bg-white shadow-sm group-hover:translate-y-[-4px] group-hover:border-[#005748] group-hover:shadow-lg transition-all duration-300 flex items-center justify-center overflow-hidden relative p-1 shrink-0">
                           <div className="w-full h-full relative rounded-full overflow-hidden bg-white">
                             <Image
                               src={farm.logoImage}
                               alt={`${farm.name} logo`}
                               fill
                               className="object-cover group-hover:scale-105 transition-transform duration-300"
-                              sizes="80px"
+                              sizes="56px"
                             />
                           </div>
                         </div>
-                        <span className="font-sans text-[10px] min-[420px]:text-xs font-semibold text-gray-700 group-hover:text-[#005748] group-hover:underline text-center leading-tight mt-1 line-clamp-2 transition-colors">
+                        <span className="font-sans text-[10px] min-[420px]:text-xs font-semibold text-gray-700 group-hover:text-[#005748] group-hover:underline text-center leading-tight line-clamp-2 transition-colors">
                           {farm.name}
                         </span>
                       </Link>
                     ))}
 
-                    {/* Explore All Farms Circle */}
-                    <Link href="/farms" className="group flex flex-col items-center gap-2 max-w-[100px] shrink-0 snap-start transition-all">
-                      <div className="w-14 h-14 min-[420px]:w-20 min-[420px]:h-20 rounded-full border border-dashed border-gray-300 bg-white hover:bg-gray-50 group-hover:translate-y-[-6px] group-hover:border-[#005748] group-hover:shadow-lg transition-all duration-300 flex items-center justify-center overflow-hidden relative shrink-0">
-                        <span className="text-[#005748] font-bold text-2xl">→</span>
+                    {/* Explore All Farms Tile */}
+                    <Link href="/farms" className="group flex flex-col items-center gap-2 w-14 min-[420px]:w-16 shrink-0 transition-all">
+                      <div className="w-12 h-12 min-[420px]:w-14 min-[420px]:h-14 rounded-full border border-dashed border-gray-300 bg-white hover:bg-gray-50 group-hover:translate-y-[-4px] group-hover:border-[#005748] group-hover:shadow-lg transition-all duration-300 flex items-center justify-center overflow-hidden relative shrink-0">
+                        <span className="text-[#005748] font-bold text-lg">→</span>
                       </div>
-                      <span className={`font-sans text-[10px] min-[420px]:text-xs font-semibold text-gray-700 group-hover:text-[#005748] group-hover:underline text-center leading-tight mt-1 line-clamp-2 transition-colors ${fontClass}`}>
+                      <span className={`font-sans text-[10px] min-[420px]:text-xs font-semibold text-gray-700 group-hover:text-[#005748] group-hover:underline text-center leading-tight line-clamp-2 transition-colors ${fontClass}`}>
                         {t.section2.exploreAll}
                       </span>
                     </Link>
