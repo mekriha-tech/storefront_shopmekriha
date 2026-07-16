@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import Script from "next/script";
 import { useState, useEffect } from "react";
 import { Cal_Sans } from "next/font/google";
 import ScrollRiver from "../components/ScrollRiver";
@@ -50,7 +51,9 @@ const defaultTranslations = {
       pill: "🏡 Farm Experiences",
       title: "Visit the Farm",
       description: "Experience the farm beyond the marketplace. Visit our partner farms, meet the people behind your food, and create unforgettable memories.",
-      cta: "Visit Farm Now"
+      cta: "Visit Farm Now",
+      videoPill: "🎥 Farm Stories",
+      videoTitle: "See It For Yourself"
     },
     section5: {
       pill: "🛒 Organic Harvest",
@@ -107,7 +110,9 @@ const defaultTranslations = {
       pill: "🏡 পামৰ অভিজ্ঞতা",
       title: "পাম ভ্ৰমণ কৰক",
       description: "বজাৰৰ সিপাৰেও পামখনৰ অভিজ্ঞতা লওক। আমাৰ অংশীদাৰ পামসমূহ ভ্ৰমণ কৰক, আপোনাৰ খাদ্যৰ আঁৰৰ মানুহখিনিক লগ কৰক, আৰু চিৰদিন মনত ৰৈ যোৱা স্মৃতি গঢ়ক।",
-      cta: "এতিয়াই পাম ভ্ৰমণ কৰক"
+      cta: "এতিয়াই পাম ভ্ৰমণ কৰক",
+      videoPill: "🎥 পামৰ কাহিনী",
+      videoTitle: "নিজেই চাওক"
     },
     section5: {
       pill: "🛒 জৈৱিক উৎপাদন",
@@ -129,6 +134,21 @@ const defaultTranslations = {
     }
   }
 };
+
+// Farm reels shown in the Visit Farm section's horizontal scroll row.
+// Add more entries here to extend the row — no other code changes needed.
+const FARM_VIDEOS = [
+  {
+    id: "DaZjLLqhQci",
+    type: "instagram",
+    permalink: "https://www.instagram.com/reel/DaZjLLqhQci/",
+  },
+  {
+    id: "6Arm5PgS01g",
+    type: "youtube",
+    embedUrl: "https://www.youtube.com/embed/6Arm5PgS01g",
+  },
+];
 
 export default function Home() {
   const [lang, setLang] = usePersistentLanguage("en");
@@ -708,8 +728,52 @@ export default function Home() {
                 </div>
               </div>
             </div>
+
+            {/* Farm video reels: horizontal-scroll row of Instagram embeds */}
+            <div className="mt-16 md:mt-20">
+              <span className={`inline-flex items-center gap-1.5 py-1 px-3.5 rounded-full text-xs font-bold bg-[#005748]/10 text-[#005748] border border-[#005748]/20 uppercase tracking-widest mb-6 ${fontClass}`}>
+                {t.section4.videoPill}
+              </span>
+
+              <h3 className={`${calSansHeading.className} ${fontClass} font-bold text-2xl md:text-3xl leading-[1.1] tracking-tight text-gray-900 mb-8`}>
+                {t.section4.videoTitle}
+              </h3>
+
+              <div className="flex flex-nowrap overflow-x-auto gap-4 snap-x snap-mandatory pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                {FARM_VIDEOS.map((video) => (
+                  <div
+                    key={video.id}
+                    className="shrink-0 snap-start w-[300px] sm:w-[326px] rounded-2xl overflow-hidden border border-gray-200 shadow-xl"
+                  >
+                    {video.type === "youtube" ? (
+                      <iframe
+                        src={video.embedUrl}
+                        title="Farm video"
+                        className="w-full aspect-[9/16]"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                        loading="lazy"
+                      />
+                    ) : (
+                      <blockquote
+                        className="instagram-media"
+                        data-instgrm-permalink={video.permalink}
+                        data-instgrm-version="14"
+                        style={{ margin: 0 }}
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </section>
+
+        <Script
+          src="https://www.instagram.com/embed.js"
+          strategy="lazyOnload"
+          onLoad={() => window.instgrm?.Embeds.process()}
+        />
 
         {/* Section 5: Explore Our Produce */}
         <section id="produce-explore" className="bg-[#FAF8F5] py-20 md:py-28 border-t border-gray-100 relative z-20">
