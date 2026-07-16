@@ -36,7 +36,9 @@
       "pill": "🏡 Farm Experiences",
       "title": "Visit the Farm",
       "description": "Experience the farm beyond the marketplace. Visit our partner farms, meet the people behind your food, and create unforgettable memories.",
-      "cta": "Visit Farm Now"
+      "cta": "Visit Farm Now",
+      "videoPill": "🎥 Farm Stories",
+      "videoTitle": "See It For Yourself"
     },
     "section5": {
       "pill": "🛒 Organic Harvest",
@@ -94,7 +96,9 @@
       "pill": "🏡 পামৰ অভিজ্ঞতা",
       "title": "পাম ভ্ৰমণ কৰক",
       "description": "বজাৰৰ সিপাৰেও পামখনৰ অভিজ্ঞতা লওক। আমাৰ অংশীদাৰ পামসমূহ ভ্ৰমণ কৰক, আপোনাৰ খাদ্যৰ আঁৰৰ মানুহখিনিক লগ কৰক, আৰু চিৰদিন মনত ৰৈ যোৱা স্মৃতি গঢ়ক।",
-      "cta": "এতিয়াই পাম ভ্ৰমণ কৰক"
+      "cta": "এতিয়াই পাম ভ্ৰমণ কৰক",
+      "videoPill": "🎥 পামৰ কাহিনী",
+      "videoTitle": "নিজেই চাওক"
     },
     "section5": {
       "pill": "🛒 জৈৱিক উৎপাদন",
