@@ -500,8 +500,11 @@ export default function Home() {
                 </p>
               </div>
 
-              {/* Right: Clickable circular logo list */}
-              <div className="flex-1 min-w-0 flex flex-col items-start justify-start text-left">
+              {/* Right: Clickable circular logo list — nudged down at narrow widths
+                  into the section's lower half, where the river's S-curve has swung
+                  away from this side (it's closest to this side near the section's
+                  top), tapering off as the wider gutter above md makes it moot. */}
+              <div className="flex-1 min-w-0 flex flex-col items-start justify-start text-left mt-24 min-[420px]:mt-28 sm:mt-16 md:mt-0">
                 <span className={`${calSansHeading.className} ${fontClass} text-base min-[420px]:text-xl md:text-2xl text-gray-900 block mb-6 tracking-tight font-bold`}>
                   {t.section2.partnerFarms}
                 </span>
@@ -527,7 +530,7 @@ export default function Home() {
                             />
                           </div>
                         </div>
-                        <span className="font-sans text-xs min-[420px]:text-sm font-semibold text-gray-700 group-hover:text-[#005748] group-hover:underline text-left leading-tight transition-colors">
+                        <span className="min-w-0 font-sans text-xs min-[420px]:text-sm font-semibold text-gray-700 group-hover:text-[#005748] group-hover:underline text-left leading-tight transition-colors break-words">
                           {farm.name}
                         </span>
                       </Link>
@@ -538,7 +541,7 @@ export default function Home() {
                       <div className="w-12 h-12 min-[420px]:w-14 min-[420px]:h-14 rounded-full border border-dashed border-gray-300 bg-white hover:bg-gray-50 group-hover:translate-x-1 group-hover:border-[#005748] group-hover:shadow-lg transition-all duration-300 flex items-center justify-center overflow-hidden relative shrink-0">
                         <span className="text-[#005748] font-bold text-lg">→</span>
                       </div>
-                      <span className={`font-sans text-xs min-[420px]:text-sm font-semibold text-gray-700 group-hover:text-[#005748] group-hover:underline text-left leading-tight transition-colors ${fontClass}`}>
+                      <span className={`min-w-0 font-sans text-xs min-[420px]:text-sm font-semibold text-gray-700 group-hover:text-[#005748] group-hover:underline text-left leading-tight transition-colors break-words ${fontClass}`}>
                         {t.section2.exploreAll}
                       </span>
                     </Link>
