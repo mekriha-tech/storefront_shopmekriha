@@ -397,20 +397,18 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-12 items-center">
               {/* Left Column */}
               <div className="md:col-span-12 flex flex-col items-center text-center">
-                <h1 className={`font-sans ${fontClass} w-full grid grid-cols-1 md:grid-cols-2 gap-y-2 md:gap-y-3.5 md:gap-x-40 lg:gap-x-56 xl:gap-x-64 tracking-normal`}>
+                <h1 className={`font-sans ${fontClass} w-full grid grid-cols-1 min-[420px]:grid-cols-2 gap-y-2 min-[420px]:gap-y-3.5 min-[420px]:gap-x-[calc(26vw_+_7rem)] tracking-normal`}>
                   {heroTitleLines.map((line, index) => (
                     <span
                       key={`${lang}-${index}-${line}`}
-                      className={`block hero-title-line max-w-[21rem] sm:max-w-[34rem] md:max-w-[27rem] leading-[1.35] ${
+                      className={`block hero-title-line max-w-[15rem] min-[420px]:max-w-[13rem] sm:max-w-[18rem] md:max-w-[27rem] leading-[1.35] ${
                         index % 2 === 0
-                          ? "justify-self-center text-center md:justify-self-end"
-                          : "justify-self-center text-center md:justify-self-start"
+                          ? "justify-self-center text-center min-[420px]:justify-self-end"
+                          : "justify-self-center text-center min-[420px]:justify-self-start"
                       } ${
-                        index === 0
+                        index === 0 || index === 3
                           ? "text-[#005748] font-semibold text-[20px] min-[390px]:text-[22px] sm:text-[25px] md:text-[29px] lg:text-[33px] md:font-medium md:text-[#005748]"
-                          : index === 2
-                            ? "text-[#0A6B5A] font-medium text-[18px] min-[390px]:text-[20px] sm:text-[23px] md:text-[29px] lg:text-[33px] md:text-[#005748]"
-                            : "text-[#60736D] font-normal text-[15px] min-[390px]:text-[16px] sm:text-[19px] md:text-[29px] lg:text-[33px] md:font-medium md:text-[#005748]"
+                          : "text-[#60736D] font-normal text-[15px] min-[390px]:text-[16px] sm:text-[19px] md:text-[29px] lg:text-[33px] md:font-medium md:text-[#005748]"
                       }`}
                       style={{ animationDelay: `${index * 520}ms` }}
                     >
@@ -426,7 +424,7 @@ export default function Home() {
                 <div className="flex items-center gap-3 sm:gap-4 mt-7 md:mt-8">
                   <a
                     href="#about"
-                    className={`py-3 px-6 sm:px-8 border border-gray-300 text-gray-700 hover:text-[#005748] hover:border-[#005748] font-bold text-xs sm:text-sm hover:bg-white transition-all rounded-full shadow-sm active:scale-95 ${fontClass}`}
+                    className={`py-3 px-6 sm:px-8 bg-[#005748] text-white font-bold text-xs sm:text-sm hover:bg-[#004337] transition-all rounded-full shadow-md hover:shadow-lg active:scale-95 ${fontClass}`}
                   >
                     {t.hero.btnOurFarms}
                   </a>
@@ -482,72 +480,70 @@ export default function Home() {
 
           {/* Content */}
           <div className="relative z-10 max-w-7xl mx-auto px-6 w-full py-16 md:py-24">
-            <div className="grid grid-cols-1 md:grid-cols-12 items-center">
-              {/* Right Column: Text and Logo section, kept clear of the river's swing through the middle columns.
-                  Between 600px and Tailwind's md breakpoint, text and farm logos split into their own
-                  side-by-side columns (flanking the narrower gutter river at that width) instead of
-                  stacking full-width and getting crossed by it; below 600px and at md+ they stack again. */}
-              <div className="md:col-start-9 md:col-span-4 flex flex-col min-[600px]:flex-row md:flex-col gap-10 min-[600px]:gap-0 justify-center min-[600px]:justify-between items-start text-left">
-                {/* Text block: pill badge, heading, description */}
-                <div className="min-[600px]:w-[33%] min-[600px]:flex-none md:w-auto flex flex-col items-start">
-                  <span className={`inline-flex items-center gap-1.5 py-1 px-3.5 rounded-full text-xs font-bold bg-[#005748]/10 text-[#005748] border border-[#005748]/20 uppercase tracking-widest mb-6 ${fontClass}`}>
-                    {t.section2.pill}
-                  </span>
+            {/* Text flanks the river on the left, farm logos flank it on the right —
+                always split (no full-width stacking at any width), with a
+                viewport-scaled gap between them (same formula as the hero) so the
+                gutter keeps pace with the river's true amplitude at any screen size. */}
+            <div className="flex flex-row items-start gap-x-[calc(26vw_+_7rem)]">
+              {/* Left: pill badge, heading, description */}
+              <div className="flex flex-col items-start text-left flex-1 min-w-0">
+                <span className={`inline-flex items-center gap-1.5 py-1 px-3.5 rounded-full text-xs font-bold bg-[#005748]/10 text-[#005748] border border-[#005748]/20 uppercase tracking-widest mb-6 ${fontClass}`}>
+                  {t.section2.pill}
+                </span>
 
-                  <h2 className={`${calSansHeading.className} ${fontClass} font-bold text-[36px] sm:text-[44px] md:text-[42px] lg:text-[48px] leading-[1.1] tracking-tight text-gray-900`}>
-                    {t.section2.title}
-                  </h2>
+                <h2 className={`${calSansHeading.className} ${fontClass} font-bold text-[22px] min-[420px]:text-[26px] sm:text-[32px] md:text-[42px] lg:text-[48px] leading-[1.15] tracking-tight text-gray-900`}>
+                  {t.section2.title}
+                </h2>
 
-                  <p className={`text-gray-600 text-sm sm:text-base leading-[1.65] mt-4 max-w-xl font-normal ${fontClass}`}>
-                    {t.section2.description}
-                  </p>
-                </div>
+                <p className={`text-gray-600 text-xs sm:text-sm md:text-base leading-[1.65] mt-4 max-w-xl font-normal ${fontClass}`}>
+                  {t.section2.description}
+                </p>
+              </div>
 
-                {/* Clickable circular logo list */}
-                <div className="min-[600px]:w-[33%] min-[600px]:flex-none md:w-full md:mt-12 w-full flex flex-col items-start justify-center">
-                  <span className={`${calSansHeading.className} ${fontClass} text-xl md:text-2xl text-gray-900 block mb-6 tracking-tight font-bold`}>
-                    {t.section2.partnerFarms}
-                  </span>
-                  {loading ? (
-                    <div className="flex gap-4">
-                      <div className="w-16 h-16 rounded-full border border-dashed border-gray-300 animate-pulse"></div>
-                      <div className="w-16 h-16 rounded-full border border-dashed border-gray-300 animate-pulse"></div>
-                      <div className="w-16 h-16 rounded-full border border-dashed border-gray-300 animate-pulse"></div>
-                    </div>
-                  ) : (
-                    <div className="flex items-start justify-start gap-6 lg:gap-8 overflow-x-auto flex-nowrap snap-x snap-mandatory -mx-6 px-6 pb-2 md:flex-wrap md:overflow-visible md:mx-0 md:px-0 md:pb-0 md:snap-none w-full [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                      {farms.slice(0, 3).map((farm) => (
-                        <Link href={`/farms/${farm.id}`} key={farm.id} className="group flex flex-col items-center gap-2 max-w-[100px] shrink-0 snap-start transition-all">
-                          {/* Sleek Circular Glass Logo Badge */}
-                          <div className="w-20 h-20 rounded-full border border-gray-200 bg-white shadow-sm group-hover:translate-y-[-6px] group-hover:border-[#005748] group-hover:shadow-lg transition-all duration-300 flex items-center justify-center overflow-hidden relative p-1 shrink-0">
-                            <div className="w-full h-full relative rounded-full overflow-hidden bg-white">
-                              <Image
-                                src={farm.logoImage}
-                                alt={`${farm.name} logo`}
-                                fill
-                                className="object-cover group-hover:scale-105 transition-transform duration-300"
-                                sizes="80px"
-                              />
-                            </div>
+              {/* Right: Clickable circular logo list */}
+              <div className="flex-1 min-w-0 flex flex-col items-start justify-start text-left">
+                <span className={`${calSansHeading.className} ${fontClass} text-base min-[420px]:text-xl md:text-2xl text-gray-900 block mb-6 tracking-tight font-bold`}>
+                  {t.section2.partnerFarms}
+                </span>
+                {loading ? (
+                  <div className="flex gap-4">
+                    <div className="w-16 h-16 rounded-full border border-dashed border-gray-300 animate-pulse"></div>
+                    <div className="w-16 h-16 rounded-full border border-dashed border-gray-300 animate-pulse"></div>
+                    <div className="w-16 h-16 rounded-full border border-dashed border-gray-300 animate-pulse"></div>
+                  </div>
+                ) : (
+                  <div className="flex items-start justify-start gap-4 lg:gap-8 overflow-x-auto flex-nowrap snap-x snap-mandatory pb-2 w-full [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                    {farms.slice(0, 3).map((farm) => (
+                      <Link href={`/farms/${farm.id}`} key={farm.id} className="group flex flex-col items-center gap-2 max-w-[100px] shrink-0 snap-start transition-all">
+                        {/* Sleek Circular Glass Logo Badge */}
+                        <div className="w-14 h-14 min-[420px]:w-20 min-[420px]:h-20 rounded-full border border-gray-200 bg-white shadow-sm group-hover:translate-y-[-6px] group-hover:border-[#005748] group-hover:shadow-lg transition-all duration-300 flex items-center justify-center overflow-hidden relative p-1 shrink-0">
+                          <div className="w-full h-full relative rounded-full overflow-hidden bg-white">
+                            <Image
+                              src={farm.logoImage}
+                              alt={`${farm.name} logo`}
+                              fill
+                              className="object-cover group-hover:scale-105 transition-transform duration-300"
+                              sizes="80px"
+                            />
                           </div>
-                          <span className="font-sans text-xs font-semibold text-gray-700 group-hover:text-[#005748] group-hover:underline text-center leading-tight mt-1 line-clamp-2 transition-colors">
-                            {farm.name}
-                          </span>
-                        </Link>
-                      ))}
-
-                      {/* Explore All Farms Circle */}
-                      <Link href="/farms" className="group flex flex-col items-center gap-2 max-w-[100px] shrink-0 snap-start transition-all">
-                        <div className="w-20 h-20 rounded-full border border-dashed border-gray-300 bg-white hover:bg-gray-50 group-hover:translate-y-[-6px] group-hover:border-[#005748] group-hover:shadow-lg transition-all duration-300 flex items-center justify-center overflow-hidden relative shrink-0">
-                          <span className="text-[#005748] font-bold text-2xl">→</span>
                         </div>
-                        <span className={`font-sans text-xs font-semibold text-gray-700 group-hover:text-[#005748] group-hover:underline text-center leading-tight mt-1 line-clamp-2 transition-colors ${fontClass}`}>
-                          {t.section2.exploreAll}
+                        <span className="font-sans text-[10px] min-[420px]:text-xs font-semibold text-gray-700 group-hover:text-[#005748] group-hover:underline text-center leading-tight mt-1 line-clamp-2 transition-colors">
+                          {farm.name}
                         </span>
                       </Link>
-                    </div>
-                  )}
-                </div>
+                    ))}
+
+                    {/* Explore All Farms Circle */}
+                    <Link href="/farms" className="group flex flex-col items-center gap-2 max-w-[100px] shrink-0 snap-start transition-all">
+                      <div className="w-14 h-14 min-[420px]:w-20 min-[420px]:h-20 rounded-full border border-dashed border-gray-300 bg-white hover:bg-gray-50 group-hover:translate-y-[-6px] group-hover:border-[#005748] group-hover:shadow-lg transition-all duration-300 flex items-center justify-center overflow-hidden relative shrink-0">
+                        <span className="text-[#005748] font-bold text-2xl">→</span>
+                      </div>
+                      <span className={`font-sans text-[10px] min-[420px]:text-xs font-semibold text-gray-700 group-hover:text-[#005748] group-hover:underline text-center leading-tight mt-1 line-clamp-2 transition-colors ${fontClass}`}>
+                        {t.section2.exploreAll}
+                      </span>
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -664,9 +660,15 @@ export default function Home() {
         <section id="visit" className="relative overflow-hidden min-h-[80vh] bg-white text-[#111827] flex items-center py-20 md:py-28 border-t border-gray-100">
           {riverLayer("visit")}
           <div className="relative z-10 max-w-7xl mx-auto px-6 w-full">
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
-              {/* Left Column: Text Content — kept clear of the river's swing through the middle columns */}
-              <div className="md:col-span-4 flex flex-col items-start text-left relative z-10">
+            {/* Both blocks flank a viewport-scaled gap (matching the river's own
+                amplitude math, same formula as the hero) instead of a fixed 12-col
+                grid split — a fixed fraction of the max-w-7xl container falls short
+                of the river's true (viewport-based) swing on wide monitors. This
+                also keeps the visit photo from fully covering the river rather than
+                just sitting beside it. */}
+            <div className="flex flex-col md:flex-row md:items-center gap-12 md:gap-x-[calc(26vw_+_7rem)]">
+              {/* Left: Text Content */}
+              <div className="flex flex-col items-start text-left relative z-10 md:flex-1 md:min-w-0 md:max-w-[26rem]">
                 <span className={`inline-flex items-center gap-1.5 py-1 px-3.5 rounded-full text-xs font-bold bg-[#005748]/10 text-[#005748] border border-[#005748]/20 uppercase tracking-widest mb-6 ${fontClass}`}>
                   {t.section4.pill}
                 </span>
@@ -684,8 +686,8 @@ export default function Home() {
                 </button>
               </div>
 
-              {/* Right Column: Visual farm visit card mockup — kept clear of the river's swing through the middle columns */}
-              <div className="md:col-start-9 md:col-span-4 relative w-full aspect-[4/3] md:aspect-[3/2] rounded-2xl overflow-hidden border border-gray-200 shadow-xl relative group">
+              {/* Right: Visual farm visit card mockup */}
+              <div className="relative w-full md:flex-1 md:min-w-0 md:max-w-[26rem] aspect-[4/3] md:aspect-[3/2] rounded-2xl overflow-hidden border border-gray-200 shadow-xl group">
                 <Image
                   src="/images/farms/majuli_hero.png"
                   alt="Assam organic tea field visit experience"
