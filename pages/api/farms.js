@@ -76,49 +76,48 @@ export default async function handler(req, res) {
     return res.status(200).json(staticFarms);
   }
 
+  const initialsOf = (name) =>
+    (name || "")
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((word) => word[0].toUpperCase())
+      .join("") || "AF";
+
   try {
     const response = await fetch(`${baseUrl}/api/farms`);
     if (!response.ok) throw new Error(`Railway backend returned status ${response.status}`);
     const data = await response.json();
 
-    const enriched = data.map((serverFarm) => {
-      const serverName = serverFarm.farm_name || serverFarm.name;
-      const matchedStatic = staticFarms.find(
-        (sf) => sf.name.toLowerCase() === serverName.toLowerCase()
-      );
+    // Map the backend's own Farm fields directly. No more guessing profile
+    // content by matching farm names against a hardcoded list - every field
+    // the storefront displays now has a real column on the backend model.
+    const mapped = data.map((serverFarm) => ({
+      id: serverFarm.id.toString(),
+      name: serverFarm.farm_name,
+      farmerName: serverFarm.farmer_name || "Assam Farmer",
+      address: serverFarm.location || "Assam, India",
+      district: serverFarm.district || "Assam",
+      state: serverFarm.state || "Assam",
+      harvest: serverFarm.primary_crop || "Organic Grains",
+      heroImage: serverFarm.farm_image || "/images/farms/rohadoi_hero.png",
+      logoImage: serverFarm.logo_image || "/images/farms/rohadoi_logo.png",
+      profileImage: initialsOf(serverFarm.farm_name),
+      about: serverFarm.about || "A partner organic farm cultivating sustainable seasonal harvests.",
+      established: serverFarm.established_year || null,
+      sizeAcres: parseFloat(serverFarm.total_area_acres) || 0,
+      certifications: serverFarm.certifications
+        ? serverFarm.certifications.split(",").map((c) => c.trim()).filter(Boolean)
+        : ["India Organic"],
+      latitude: serverFarm.latitude,
+      longitude: serverFarm.longitude,
+      coordinates:
+        serverFarm.latitude != null && serverFarm.longitude != null
+          ? `${serverFarm.latitude}° N, ${serverFarm.longitude}° E`
+          : null
+    }));
 
-      if (matchedStatic) {
-        return {
-          ...matchedStatic,
-          id: serverFarm.id.toString(),
-          name: serverName,
-          farmerName: serverFarm.farmer_name || matchedStatic.farmerName,
-          address: serverFarm.location || matchedStatic.address,
-          sizeAcres: parseFloat(serverFarm.total_area_acres) || matchedStatic.sizeAcres,
-          harvest: serverFarm.primary_crop || matchedStatic.harvest
-        };
-      }
-
-      return {
-        id: serverFarm.id.toString(),
-        name: serverName,
-        farmerName: serverFarm.farmer_name || "Assam Farmer",
-        address: serverFarm.location || "Assam, India",
-        district: "Nagaon",
-        state: "Assam",
-        harvest: serverFarm.primary_crop || "Organic Grains",
-        heroImage: "/images/farms/rohadoi_hero.png",
-        logoImage: "/images/farms/rohadoi_logo.png",
-        profileImage: "AF",
-        about: "A partner organic farm cultivating sustainable seasonal harvests.",
-        established: 2020,
-        sizeAcres: parseFloat(serverFarm.total_area_acres) || 10,
-        certifications: ["India Organic"],
-        coordinates: "26.3484° N, 92.6841° E"
-      };
-    });
-
-    return res.status(200).json(enriched);
+    return res.status(200).json(mapped);
   } catch (err) {
     console.error("Proxy error fetching farms, using static fallbacks:", err);
     return res.status(200).json(staticFarms);
