@@ -2,16 +2,27 @@
 // No DOM access here — keeps this file trivially sanity-checkable with plain `node`.
 
 /**
- * Generate points for a vertical sine-wave centerline.
+ * Generate points for a vertical sine-wave centerline. `extraYs` (e.g.
+ * section boundary Y positions) are computed with the same formula and
+ * merged in, sorted, so callers can guarantee an exact sample exists at
+ * those Y values — otherwise a boundary can fall between two regularly
+ * spaced samples and a per-section split of the curve won't quite reach
+ * the section edge, leaving a small gap/seam where it's rendered.
  */
-export function generateWavePoints(height, centerX, amplitude, wavelengths, spacing = 40) {
+export function generateWavePoints(height, centerX, amplitude, wavelengths, spacing = 40, extraYs = []) {
   const points = [];
   const steps = Math.max(2, Math.ceil(height / spacing));
+  const waveX = (y) => centerX + amplitude * Math.sin((y / height) * wavelengths * Math.PI * 2);
   for (let i = 0; i <= steps; i++) {
     const y = (i / steps) * height;
-    const x = centerX + amplitude * Math.sin((y / height) * wavelengths * Math.PI * 2);
-    points.push({ x, y });
+    points.push({ x: waveX(y), y });
   }
+  for (const y of extraYs) {
+    if (y <= 0 || y >= height) continue;
+    if (points.some((p) => Math.abs(p.y - y) < 0.5)) continue;
+    points.push({ x: waveX(y), y });
+  }
+  points.sort((a, b) => a.y - b.y);
   return points;
 }
 
@@ -40,9 +51,13 @@ export function pointsToSmoothPath(points) {
 
 /**
  * Split full-path points into one array per section, using ascending
- * section start-Y boundaries (boundaries[0] must be 0). Each segment
- * after the first is prefixed with the previous segment's last point
- * so the drawn segments stay visually continuous.
+ * section start-Y boundaries (boundaries[0] must be 0). A point exactly
+ * at an internal boundary naturally starts the segment after it; it's
+ * also mirrored onto the end of the previous segment (assumes `points`
+ * already contains an exact sample at each boundary — see the `extraYs`
+ * param on `generateWavePoints`), so adjacent segments' independently
+ * smoothed curves share a precise start/end point and render with no
+ * seam between sections.
  */
 export function splitPointsBySection(points, boundaries) {
   const segments = boundaries.map(() => []);
@@ -57,9 +72,8 @@ export function splitPointsBySection(points, boundaries) {
     segments[segIndex].push(point);
   }
   for (let i = 1; i < segments.length; i++) {
-    const prevSeg = segments[i - 1];
-    if (prevSeg.length > 0) {
-      segments[i].unshift(prevSeg[prevSeg.length - 1]);
+    if (segments[i].length > 0) {
+      segments[i - 1].push(segments[i][0]);
     }
   }
   return segments;

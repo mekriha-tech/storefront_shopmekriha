@@ -394,7 +394,7 @@ export default function Home() {
 
           {/* Content */}
           <div className="relative z-10 max-w-7xl mx-auto px-6 w-full pt-9 pb-3 sm:pt-12 md:py-20">
-            <div className="grid md:grid-cols-12 items-center">
+            <div className="grid grid-cols-1 md:grid-cols-12 items-center">
               {/* Left Column */}
               <div className="md:col-span-12 flex flex-col items-center text-center">
                 <h1 className={`font-sans ${fontClass} w-full grid grid-cols-1 md:grid-cols-2 gap-y-2 md:gap-y-3.5 md:gap-x-40 lg:gap-x-56 xl:gap-x-64 tracking-normal`}>
@@ -456,40 +456,55 @@ export default function Home() {
         </section>
 
         {/* Section 2: Growing Stronger, Together */}
-        <section id="about" className="relative overflow-hidden min-h-[82vh] border-t border-gray-100 bg-white text-[#111827] flex items-center">
+        <section id="about" className="relative overflow-hidden min-h-[82vh] border-t border-gray-100 bg-white text-[#111827] flex flex-col items-center">
           {riverLayer("about")}
-          {/* Mirrored Left-aligned Artwork matching Section 1 structure */}
-          <div className="absolute inset-y-0 left-0 w-[100vw] lg:w-[100vw] xl:w-[100vw] pointer-events-none z-0">
+          {/* Mirrored Left-aligned Artwork matching Section 1 structure.
+              Scaled up from its bottom-left corner (where it already
+              visually sits) so the artwork fills more of the section
+              instead of leaving a mostly-empty gap above it — object-fit
+              alone can't grow it further since the container is already
+              full width. Hidden below md: at those widths the text/farms
+              columns use the left side directly (see the split layout
+              below), and the separate "Mobile Image Fallback" block
+              handles the illustration in-flow instead, so this absolute
+              copy would otherwise sit behind and collide with that text. */}
+          <div className="absolute inset-y-0 left-0 w-[100vw] pointer-events-none z-0 hidden md:block">
             <Image
               src="/herovector.png"
               alt="Farmer walking mirrored illustration"
               fill
               priority
-              className="object-contain object-right-bottom select-none transform scale-x-[-1]"
+              className="object-contain object-right-bottom select-none"
+              style={{ transform: "scaleX(-1.5) scaleY(1.5)", transformOrigin: "center bottom" }}
               sizes="60vw"
             />
           </div>
 
           {/* Content */}
           <div className="relative z-10 max-w-7xl mx-auto px-6 w-full py-16 md:py-24">
-            <div className="grid md:grid-cols-12 items-center">
-              {/* Right Column: Text and Logo section matching Section 1 grid width but on the right */}
-              <div className="md:col-start-6 md:col-span-7 flex flex-col justify-center items-start text-left">
-                {/* Modern Pill Badge */}
-                <span className={`inline-flex items-center gap-1.5 py-1 px-3.5 rounded-full text-xs font-bold bg-[#005748]/10 text-[#005748] border border-[#005748]/20 uppercase tracking-widest mb-6 ${fontClass}`}>
-                  {t.section2.pill}
-                </span>
+            <div className="grid grid-cols-1 md:grid-cols-12 items-center">
+              {/* Right Column: Text and Logo section, kept clear of the river's swing through the middle columns.
+                  Between 600px and Tailwind's md breakpoint, text and farm logos split into their own
+                  side-by-side columns (flanking the narrower gutter river at that width) instead of
+                  stacking full-width and getting crossed by it; below 600px and at md+ they stack again. */}
+              <div className="md:col-start-9 md:col-span-4 flex flex-col min-[600px]:flex-row md:flex-col gap-10 min-[600px]:gap-0 justify-center min-[600px]:justify-between items-start text-left">
+                {/* Text block: pill badge, heading, description */}
+                <div className="min-[600px]:w-[33%] min-[600px]:flex-none md:w-auto flex flex-col items-start">
+                  <span className={`inline-flex items-center gap-1.5 py-1 px-3.5 rounded-full text-xs font-bold bg-[#005748]/10 text-[#005748] border border-[#005748]/20 uppercase tracking-widest mb-6 ${fontClass}`}>
+                    {t.section2.pill}
+                  </span>
 
-                <h2 className={`${calSansHeading.className} ${fontClass} font-bold text-[36px] sm:text-[44px] md:text-[42px] lg:text-[48px] leading-[1.1] tracking-tight text-gray-900`}>
-                  {t.section2.title}
-                </h2>
+                  <h2 className={`${calSansHeading.className} ${fontClass} font-bold text-[36px] sm:text-[44px] md:text-[42px] lg:text-[48px] leading-[1.1] tracking-tight text-gray-900`}>
+                    {t.section2.title}
+                  </h2>
 
-                <p className={`text-gray-600 text-sm sm:text-base leading-[1.65] mt-4 max-w-xl font-normal ${fontClass}`}>
-                  {t.section2.description}
-                </p>
+                  <p className={`text-gray-600 text-sm sm:text-base leading-[1.65] mt-4 max-w-xl font-normal ${fontClass}`}>
+                    {t.section2.description}
+                  </p>
+                </div>
 
-                {/* Clickable circular logo list centered */}
-                <div className="mt-12 w-full flex flex-col items-start justify-center">
+                {/* Clickable circular logo list */}
+                <div className="min-[600px]:w-[33%] min-[600px]:flex-none md:w-full md:mt-12 w-full flex flex-col items-start justify-center">
                   <span className={`${calSansHeading.className} ${fontClass} text-xl md:text-2xl text-gray-900 block mb-6 tracking-tight font-bold`}>
                     {t.section2.partnerFarms}
                   </span>
@@ -649,9 +664,9 @@ export default function Home() {
         <section id="visit" className="relative overflow-hidden min-h-[80vh] bg-white text-[#111827] flex items-center py-20 md:py-28 border-t border-gray-100">
           {riverLayer("visit")}
           <div className="relative z-10 max-w-7xl mx-auto px-6 w-full">
-            <div className="grid md:grid-cols-12 gap-12 items-center">
-              {/* Left Column: Text Content */}
-              <div className="md:col-span-6 flex flex-col items-start text-left relative z-10">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+              {/* Left Column: Text Content — kept clear of the river's swing through the middle columns */}
+              <div className="md:col-span-4 flex flex-col items-start text-left relative z-10">
                 <span className={`inline-flex items-center gap-1.5 py-1 px-3.5 rounded-full text-xs font-bold bg-[#005748]/10 text-[#005748] border border-[#005748]/20 uppercase tracking-widest mb-6 ${fontClass}`}>
                   {t.section4.pill}
                 </span>
@@ -669,8 +684,8 @@ export default function Home() {
                 </button>
               </div>
 
-              {/* Right Column: Visual farm visit card mockup */}
-              <div className="md:col-span-6 relative w-full aspect-[4/3] md:aspect-[3/2] rounded-2xl overflow-hidden border border-gray-200 shadow-xl relative group">
+              {/* Right Column: Visual farm visit card mockup — kept clear of the river's swing through the middle columns */}
+              <div className="md:col-start-9 md:col-span-4 relative w-full aspect-[4/3] md:aspect-[3/2] rounded-2xl overflow-hidden border border-gray-200 shadow-xl relative group">
                 <Image
                   src="/images/farms/majuli_hero.png"
                   alt="Assam organic tea field visit experience"
