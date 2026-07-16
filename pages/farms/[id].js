@@ -116,6 +116,10 @@ export default function FarmPage() {
     }
 
     function fallbackToHardcodedCoords() {
+      if (farm?.latitude != null && farm?.longitude != null) {
+        fetchWeatherByCoords(farm.latitude, farm.longitude);
+        return;
+      }
       const coordinatesString = farm?.coordinates || "";
       const matches = coordinatesString.match(/(\d+\.\d+)/g);
       if (matches && matches.length >= 2) {
@@ -444,7 +448,7 @@ export default function FarmPage() {
               </div>
               <div>
                 <span className="text-gray-400 block text-xs font-semibold uppercase tracking-wider mb-0.5">Established</span>
-                <span className="font-semibold text-gray-800">{farm?.established}</span>
+                <span className="font-semibold text-gray-800">{farm?.established || "Not specified"}</span>
               </div>
               <div>
                 <span className="text-gray-400 block text-xs font-semibold uppercase tracking-wider mb-0.5">Land Size</span>
@@ -452,7 +456,7 @@ export default function FarmPage() {
               </div>
               <div>
                 <span className="text-gray-400 block text-xs font-semibold uppercase tracking-wider mb-0.5">Coordinates</span>
-                <span className="font-semibold text-gray-800">{farm?.coordinates}</span>
+                <span className="font-semibold text-gray-800">{farm?.coordinates || "Not specified"}</span>
               </div>
             </div>
 
