@@ -167,7 +167,6 @@ export default function Home() {
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerLocation, setRegisterLocation] = useState("");
   const [registerTotalArea, setRegisterTotalArea] = useState("");
-  const [registerPrimaryCrop, setRegisterPrimaryCrop] = useState("");
 
   const handlePartnerRegisterSubmit = (e) => {
     e.preventDefault();
@@ -179,8 +178,7 @@ export default function Home() {
       phone: registerPhone,
       email: registerEmail || undefined,
       location: registerLocation,
-      total_area_acres: parseFloat(registerTotalArea),
-      primary_crop: registerPrimaryCrop
+      total_area_acres: parseFloat(registerTotalArea)
     };
 
     fetch("/api/farms/register", {
@@ -209,7 +207,6 @@ export default function Home() {
         setRegisterEmail("");
         setRegisterLocation("");
         setRegisterTotalArea("");
-        setRegisterPrimaryCrop("");
         alert("Success! Your farm registration request has been submitted. A Mekriha coordinator will reach out to verify details soon.");
       })
       .catch((err) => {
@@ -1065,17 +1062,6 @@ export default function Home() {
                     value={registerTotalArea}
                     onChange={(e) => setRegisterTotalArea(e.target.value)}
                     placeholder="e.g. 12.5"
-                    className="border border-gray-200 rounded-lg p-2.5 text-sm focus:outline-none focus:border-[#005748] w-full bg-white text-gray-800"
-                  />
-                </div>
-                <div className="flex flex-col gap-1">
-                  <label className="text-xs font-bold text-gray-600 uppercase">Primary Organic Crop *</label>
-                  <input
-                    type="text"
-                    required
-                    value={registerPrimaryCrop}
-                    onChange={(e) => setRegisterPrimaryCrop(e.target.value)}
-                    placeholder="e.g. Joha Rice / Yellow Mustard"
                     className="border border-gray-200 rounded-lg p-2.5 text-sm focus:outline-none focus:border-[#005748] w-full bg-white text-gray-800"
                   />
                 </div>
