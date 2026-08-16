@@ -254,6 +254,21 @@ export default function Home() {
   // Shortcut for selected translations dictionary based on state
   const t = translations[lang] || defaultTranslations[lang];
 
+  // Rohdoi is Mekriha's own in-house farm - surface it first in the
+  // Partner Farms preview row.
+  const orderedFarms = [...farms].sort((a, b) => {
+    const aIsRohdoi = a.name?.toLowerCase().includes("rohdoi") ? 0 : 1;
+    const bIsRohdoi = b.name?.toLowerCase().includes("rohdoi") ? 0 : 1;
+    return aIsRohdoi - bIsRohdoi;
+  });
+
+  // In-stock produce first, upcoming harvests pushed to the end.
+  const orderedProducts = [...products].sort((a, b) => {
+    const aAvailable = a.availability_status === "available" ? 0 : 1;
+    const bAvailable = b.availability_status === "available" ? 0 : 1;
+    return aAvailable - bAvailable;
+  });
+
   // Helper font class to apply Noto Sans Bengali when Assamese is active
   const fontClass = lang === "as" ? "font-assamese tracking-normal font-medium" : "";
   const heroTitleLines = lang === "en"
@@ -534,7 +549,7 @@ export default function Home() {
                   </div>
                 ) : (
                   <div className="flex flex-wrap items-start gap-x-4 gap-y-5 w-full">
-                    {farms.slice(0, 3).map((farm) => (
+                    {orderedFarms.slice(0, 3).map((farm) => (
                       <Link href={`/farms/${farm.id}`} key={farm.id} className="group flex flex-col items-center gap-2 w-14 min-[420px]:w-16 shrink-0 transition-all">
                         {/* Sleek Circular Glass Logo Badge */}
                         <div className="w-12 h-12 min-[420px]:w-14 min-[420px]:h-14 rounded-full border border-gray-200 bg-white shadow-sm group-hover:translate-y-[-4px] group-hover:border-[#005748] group-hover:shadow-lg transition-all duration-300 flex items-center justify-center overflow-hidden relative p-1 shrink-0">
@@ -794,7 +809,7 @@ export default function Home() {
 
             {/* Produce Grid from Database API */}
             <div className="flex flex-nowrap overflow-x-auto gap-4 snap-x snap-mandatory -mx-6 px-6 pb-4 md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-6 md:overflow-visible md:mx-0 md:px-0 md:pb-0 md:snap-none max-w-6xl mx-auto mb-16 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-              {products.map((product) => {
+              {orderedProducts.map((product) => {
                 const isAvailable = product.availability_status === "available";
                 return (
                   <Link href={`/products/${product.id}`} key={product.id} className="group bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between cursor-pointer w-[168px] shrink-0 snap-start md:w-auto md:shrink">
