@@ -501,7 +501,7 @@ export default function Home() {
                 always split (no full-width stacking at any width), with a
                 viewport-scaled gap between them (same formula as the hero) so the
                 gutter keeps pace with the river's true amplitude at any screen size. */}
-            <div className="flex flex-row items-start gap-x-[calc(26vw_+_7rem)]">
+            <div className="flex flex-row items-start gap-x-6 sm:gap-x-[calc(26vw_+_7rem)]">
               {/* Left: pill badge, heading, description */}
               <div className="flex flex-col items-start text-left flex-1 min-w-0">
                 <span className={`inline-flex items-center gap-1.5 py-1 px-3.5 rounded-full text-xs font-bold bg-[#005748]/10 text-[#005748] border border-[#005748]/20 uppercase tracking-widest mb-6 ${fontClass}`}>
