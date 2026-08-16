@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { Cal_Sans } from "next/font/google";
 import usePersistentLanguage from "../../components/usePersistentLanguage";
 import FloatingLanguageToggle from "../../components/FloatingLanguageToggle";
+import MediaImage from "../../components/MediaImage";
 
 const calSansHeading = Cal_Sans({
   weight: "400",
@@ -119,10 +120,9 @@ export default function FarmsDirectoryPage() {
                   <div>
                     {/* Hero Image */}
                     <div className="relative w-full aspect-[16/10] bg-gray-50 overflow-hidden border-b border-gray-50">
-                      <Image
+                      <MediaImage
                         src={farm.heroImage}
                         alt={`${farm.name} farm showcase`}
-                        fill
                         className="object-cover group-hover:scale-103 transition-transform duration-500"
                         sizes="(max-w-768px) 100vw, 33vw"
                       />

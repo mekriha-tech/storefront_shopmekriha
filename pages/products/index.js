@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { Cal_Sans } from "next/font/google";
 import usePersistentLanguage from "../../components/usePersistentLanguage";
 import FloatingLanguageToggle from "../../components/FloatingLanguageToggle";
+import MediaImage from "../../components/MediaImage";
 
 const calSansHeading = Cal_Sans({
   weight: "400",
@@ -323,10 +324,9 @@ export default function ProductsDirectoryPage() {
                     <Link href={`/products/${product.id}`} className="cursor-pointer">
                       {/* Product Image */}
                       <div className="relative w-full aspect-[4/3] bg-gray-50 overflow-hidden border-b border-gray-50">
-                        <Image
+                        <MediaImage
                           src={product.image1}
                           alt={product.name}
-                          fill
                           className="object-cover group-hover:scale-103 transition-transform duration-500"
                           sizes="(max-w-768px) 100vw, 25vw"
                         />

@@ -5,6 +5,7 @@ import Script from "next/script";
 import { useState, useEffect } from "react";
 import { Cal_Sans } from "next/font/google";
 import ScrollRiver from "../components/ScrollRiver";
+import MediaImage from "../components/MediaImage";
 import usePersistentLanguage from "../components/usePersistentLanguage";
 import FloatingLanguageToggle from "../components/FloatingLanguageToggle";
 
@@ -538,10 +539,9 @@ export default function Home() {
                         {/* Sleek Circular Glass Logo Badge */}
                         <div className="w-12 h-12 min-[420px]:w-14 min-[420px]:h-14 rounded-full border border-gray-200 bg-white shadow-sm group-hover:translate-y-[-4px] group-hover:border-[#005748] group-hover:shadow-lg transition-all duration-300 flex items-center justify-center overflow-hidden relative p-1 shrink-0">
                           <div className="w-full h-full relative rounded-full overflow-hidden bg-white">
-                            <Image
+                            <MediaImage
                               src={farm.logoImage}
                               alt={`${farm.name} logo`}
-                              fill
                               className="object-cover group-hover:scale-105 transition-transform duration-300"
                               sizes="56px"
                             />
@@ -801,10 +801,9 @@ export default function Home() {
                     <div>
                       {/* Product Image */}
                       <div className="relative w-full aspect-square md:aspect-[4/3] bg-gray-50 overflow-hidden">
-                        <Image
+                        <MediaImage
                           src={product.image1}
                           alt={product.name}
-                          fill
                           className="object-cover group-hover:scale-103 transition-transform duration-300"
                           sizes="(max-width: 768px) 40vw, 25vw"
                         />
