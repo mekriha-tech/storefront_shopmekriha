@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Cal_Sans } from "next/font/google";
 import usePersistentLanguage from "../../components/usePersistentLanguage";
 import FloatingLanguageToggle from "../../components/FloatingLanguageToggle";
+import MediaImage from "../../components/MediaImage";
 
 const calSansHeading = Cal_Sans({
   weight: "400",
@@ -242,37 +243,35 @@ export default function ProductDetailPage() {
           <div className="col-span-12 md:col-span-6 flex flex-col gap-4">
             {/* Active Display Image */}
             <div className="relative w-full aspect-[4/3] md:aspect-[3/2] border border-gray-100 bg-white shadow-xl rounded-2xl overflow-hidden">
-              {activeImage && (
-                <Image
-                  src={activeImage}
-                  alt={product?.name || "Product image"}
-                  fill
-                  priority
-                  className="object-cover"
-                  sizes="(max-w-768px) 100vw, 50vw"
-                />
-              )}
+              <MediaImage
+                src={activeImage}
+                alt={product?.name || "Product image"}
+                priority
+                className="object-cover"
+                sizes="(max-w-768px) 100vw, 50vw"
+              />
             </div>
-            
-            {/* Carousel Thumbnails */}
-            <div className="flex gap-3">
-              {[product?.image1, product?.image2, product?.image3].filter(Boolean).map((img, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setActiveImage(img)}
-                  className={`w-20 h-20 rounded-xl overflow-hidden border-2 relative cursor-pointer transition-all ${
-                    activeImage === img ? "border-[#005748] scale-102 shadow-sm" : "border-transparent opacity-60 hover:opacity-100"
-                  }`}
-                >
-                  <Image
-                    src={img}
-                    alt={`Thumbnail image ${idx + 1}`}
-                    fill
-                    className="object-cover"
-                  />
-                </button>
-              ))}
-            </div>
+
+            {/* Carousel Thumbnails - only shown when there's more than one real image */}
+            {[product?.image1, product?.image2, product?.image3].filter(Boolean).length > 1 && (
+              <div className="flex gap-3">
+                {[product?.image1, product?.image2, product?.image3].filter(Boolean).map((img, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setActiveImage(img)}
+                    className={`w-20 h-20 rounded-xl overflow-hidden border-2 relative cursor-pointer transition-all ${
+                      activeImage === img ? "border-[#005748] scale-102 shadow-sm" : "border-transparent opacity-60 hover:opacity-100"
+                    }`}
+                  >
+                    <MediaImage
+                      src={img}
+                      alt={`Thumbnail image ${idx + 1}`}
+                      className="object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Right Column: E-commerce Details */}
