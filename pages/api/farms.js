@@ -1,79 +1,9 @@
 export default async function handler(req, res) {
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
 
-  const staticFarms = [
-    {
-      id: "3",
-      name: "Rohadoi Organic Farm",
-      farmerName: "Rupesh Bhuyan",
-      address: "Rohadoi Village, Nagaon, Assam - 782001",
-      district: "Nagaon",
-      state: "Assam",
-      harvest: "Heritage Joha Rice & Organic Yellow Mustard",
-      heroImage: "/images/farms/rohadoi_hero.png",
-      logoImage: "/images/farms/rohadoi_logo.png",
-      profileImage: "RF",
-      about: "Rohadoi Organic Farm is dedicated to restoring heritage rice varieties and chemical-free mustard oil production in Nagaon. By following ancient crop rotation techniques combined with modern composting, we bring pure flavor back to your plate.",
-      established: 2017,
-      sizeAcres: 12.5,
-      certifications: ["PGS-India Organic", "NPOP Certified"],
-      coordinates: "26.3484° N, 92.6841° E"
-    },
-    {
-      id: "4",
-      name: "Majuli Heritage Tea Estate",
-      farmerName: "Hemo Payeng",
-      address: "Kamalabari, Majuli Island, Assam - 785104",
-      district: "Majuli",
-      state: "Assam",
-      harvest: "Assam Orthodox Black Tea & Purple Tea",
-      heroImage: "/images/farms/majuli_hero.png",
-      logoImage: "/images/farms/majuli_logo.png",
-      profileImage: "MT",
-      about: "Located on the world's largest river island, Majuli Heritage Tea Estate produces organic, handmade orthodox black tea. Every leaf is hand-plucked and processed in small batches using traditional techniques to preserve the unique riverine terroir.",
-      established: 2019,
-      sizeAcres: 24.0,
-      certifications: ["Fairtrade Certified", "NPOP Organic"],
-      coordinates: "26.9602° N, 94.2185° E"
-    },
-    {
-      id: "5",
-      name: "Kopili Valley Spices",
-      farmerName: "Devabrata Hazarika",
-      address: "Mariani Road, Jorhat, Assam - 785008",
-      district: "Jorhat",
-      state: "Assam",
-      harvest: "Organic Karbi Anglong Ginger & Lakadong Turmeric",
-      heroImage: "/images/farms/jorhat_hero.png",
-      logoImage: "/images/farms/rohadoi_logo.png",
-      profileImage: "KV",
-      about: "Jorhat's rich alluvial plains provide the perfect climate for our high-curcumin Lakadong turmeric and fibrous organic ginger. We partner with local self-help groups to cultivate, harvest, and dry our spices naturally under the sun.",
-      established: 2015,
-      sizeAcres: 8.2,
-      certifications: ["USDA Organic", "India Organic"],
-      coordinates: "26.7509° N, 94.2037° E"
-    },
-    {
-      id: "6",
-      name: "Dihing Citrus Groves",
-      farmerName: "Prabal Saikia",
-      address: "Mangaldai, Darrang, Assam - 784125",
-      district: "Darrang",
-      state: "Assam",
-      harvest: "Kaji Nemu (Assam Lemon) & Assam Bhut Jolokia",
-      heroImage: "/images/farms/darrang_hero.png",
-      logoImage: "/images/farms/majuli_logo.png",
-      profileImage: "DC",
-      about: "Dihing Citrus Groves is Assam's premier grower of GI-tagged Kaji Nemu (Assam Lemons) and fiery Bhut Jolokia (Ghost Peppers). We pride ourselves on drip-irrigation water management and organic vermicompost fertilization.",
-      established: 2021,
-      sizeAcres: 15.0,
-      certifications: ["PGS-India Green", "NPOP Organic"],
-      coordinates: "26.4312° N, 92.0308° E"
-    }
-  ];
-
   if (!baseUrl) {
-    return res.status(200).json(staticFarms);
+    console.error("NEXT_PUBLIC_API_BASE_URL is not set - cannot reach the backend.");
+    return res.status(500).json({ error: "Backend API URL is not configured." });
   }
 
   const initialsOf = (name) =>
@@ -86,12 +16,12 @@ export default async function handler(req, res) {
 
   try {
     const response = await fetch(`${baseUrl}/api/farms`);
-    if (!response.ok) throw new Error(`Railway backend returned status ${response.status}`);
+    if (!response.ok) throw new Error(`Backend returned status ${response.status}`);
     const data = await response.json();
 
-    // Map the backend's own Farm fields directly. No more guessing profile
-    // content by matching farm names against a hardcoded list - every field
-    // the storefront displays now has a real column on the backend model.
+    // Map the backend's own Farm fields directly. No hardcoded fallback -
+    // every field the storefront displays now has a real column on the
+    // backend model.
     const mapped = data.map((serverFarm) => ({
       id: serverFarm.id.toString(),
       name: serverFarm.farm_name,
@@ -100,15 +30,15 @@ export default async function handler(req, res) {
       district: serverFarm.district || "Assam",
       state: serverFarm.state || "Assam",
       harvest: serverFarm.primary_crop || "Organic Grains",
-      heroImage: serverFarm.farm_image || "/images/farms/rohadoi_hero.png",
-      logoImage: serverFarm.logo_image || "/images/farms/rohadoi_logo.png",
+      heroImage: serverFarm.farm_image || null,
+      logoImage: serverFarm.logo_image || null,
       profileImage: initialsOf(serverFarm.farm_name),
       about: serverFarm.about || "A partner organic farm cultivating sustainable seasonal harvests.",
       established: serverFarm.established_year || null,
       sizeAcres: parseFloat(serverFarm.total_area_acres) || 0,
       certifications: serverFarm.certifications
         ? serverFarm.certifications.split(",").map((c) => c.trim()).filter(Boolean)
-        : ["India Organic"],
+        : [],
       latitude: serverFarm.latitude,
       longitude: serverFarm.longitude,
       coordinates:
@@ -119,7 +49,7 @@ export default async function handler(req, res) {
 
     return res.status(200).json(mapped);
   } catch (err) {
-    console.error("Proxy error fetching farms, using static fallbacks:", err);
-    return res.status(200).json(staticFarms);
+    console.error("Proxy error fetching farms from backend:", err);
+    return res.status(502).json({ error: "Could not reach the backend." });
   }
 }

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Cal_Sans } from "next/font/google";
 import usePersistentLanguage from "../../components/usePersistentLanguage";
 import FloatingLanguageToggle from "../../components/FloatingLanguageToggle";
+import MediaImage from "../../components/MediaImage";
 
 const calSansHeading = Cal_Sans({
   weight: "400",
@@ -401,16 +402,13 @@ export default function FarmPage() {
           
           {/* Left Column: Huge Farm Image */}
           <div className="col-span-12 md:col-span-6 relative w-full aspect-[4/3] md:aspect-[3/2] border border-gray-100 bg-white shadow-xl hover:shadow-2xl transition-all duration-300 rounded-2xl overflow-hidden">
-            {farm?.heroImage && (
-              <Image
-                src={farm.heroImage}
-                alt={`${farm?.name || "Farm"} agricultural fields`}
-                fill
-                priority
-                className="object-cover"
-                sizes="(max-w-768px) 100vw, 50vw"
-              />
-            )}
+            <MediaImage
+              src={farm?.heroImage}
+              alt={`${farm?.name || "Farm"} agricultural fields`}
+              priority
+              className="object-cover"
+              sizes="(max-w-768px) 100vw, 50vw"
+            />
           </div>
 
           {/* Right Column: Left-aligned Farm Info */}
@@ -420,14 +418,11 @@ export default function FarmPage() {
               {/* Circular Logo Badge */}
               <div className="w-16 h-16 rounded-full border border-gray-100 bg-white shadow-md flex items-center justify-center overflow-hidden p-0.5 shrink-0 select-none">
                 <div className="w-full h-full relative rounded-full overflow-hidden">
-                  {farm?.logoImage && (
-                    <Image
-                      src={farm.logoImage}
-                      alt={`${farm?.name || "Farm"} logo`}
-                      fill
-                      className="object-cover"
-                    />
-                  )}
+                  <MediaImage
+                    src={farm?.logoImage}
+                    alt={`${farm?.name || "Farm"} logo`}
+                    className="object-cover"
+                  />
                 </div>
               </div>
               <div>
@@ -590,15 +585,12 @@ export default function FarmPage() {
                       <div>
                         {/* Crop Image */}
                         <div className="relative w-full aspect-[4/3] bg-gray-50 overflow-hidden border-b border-gray-50">
-                          {product?.image1 && (
-                            <Image
-                              src={product.image1}
-                              alt={product?.name || "Crop"}
-                              fill
-                              className="object-cover group-hover:scale-103 transition-transform duration-500"
-                              sizes="(max-w-768px) 100vw, 33vw"
-                            />
-                          )}
+                          <MediaImage
+                            src={product?.image1}
+                            alt={product?.name || "Crop"}
+                            className="object-cover group-hover:scale-103 transition-transform duration-500"
+                            sizes="(max-w-768px) 100vw, 33vw"
+                          />
                           <div className="absolute top-3 right-3">
                             {isAvailable ? (
                               <span className="text-[9px] font-bold bg-emerald-500 text-white px-2.5 py-1 rounded-full uppercase tracking-wider">
