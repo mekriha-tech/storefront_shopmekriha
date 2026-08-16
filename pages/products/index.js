@@ -316,12 +316,11 @@ export default function ProductsDirectoryPage() {
               {filteredProducts.map((product) => {
                 const isAvailable = product.availability_status === "available";
                 return (
-                  <Link
-                    href={`/products/${product.id}`}
+                  <div
                     key={product.id}
-                    className="group bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between cursor-pointer"
+                    className="group bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between"
                   >
-                    <div>
+                    <Link href={`/products/${product.id}`} className="cursor-pointer">
                       {/* Product Image */}
                       <div className="relative w-full aspect-[4/3] bg-gray-50 overflow-hidden border-b border-gray-50">
                         <Image
@@ -344,26 +343,38 @@ export default function ProductsDirectoryPage() {
                           )}
                         </div>
                       </div>
-                      
+
                       {/* Text info */}
-                      <div className="p-5 text-left">
+                      <div className="p-5 pb-0 text-left">
                         {/* Primary Tag */}
                         <span className="text-[9px] font-bold text-[#005748] tracking-wider uppercase bg-[#005748]/5 px-2 py-0.5 rounded-sm">
                           {product.tags.split(",")[0].trim()}
                         </span>
-                        
+
                         <h3 className={`font-sans font-bold text-gray-900 text-base mt-2.5 line-clamp-1 group-hover:text-[#005748] transition-colors ${fontClass}`}>
                           {product.name}
                         </h3>
-                        
+
                         <p className={`text-gray-500 text-xs mt-1.5 line-clamp-2 leading-relaxed ${fontClass}`}>
                           {product.description}
                         </p>
                       </div>
+                    </Link>
+
+                    <div className="px-5">
+                      {/* Farm badge - separate link so it navigates to the farm, not the product */}
+                      {product.farm_name && (
+                        <Link
+                          href={`/farms/${product.farm_id}`}
+                          className="inline-flex items-center gap-1 mt-3 text-[10px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-100 px-2.5 py-1 rounded-full hover:bg-emerald-100 transition-colors"
+                        >
+                          🏡 {product.farm_name}
+                        </Link>
+                      )}
                     </div>
 
                     {/* Bottom Action Section */}
-                    <div className="p-5 pt-0 flex flex-col gap-3">
+                    <Link href={`/products/${product.id}`} className="p-5 pt-3 flex flex-col gap-3 cursor-pointer">
                       <div className="border-t border-gray-50 pt-4 flex items-center justify-between text-xs mt-auto w-full">
                         {isAvailable ? (
                           <div className="flex flex-col items-start">
@@ -387,8 +398,8 @@ export default function ProductsDirectoryPage() {
                           {isAvailable ? t.btnBuy : t.btnRequest}
                         </span>
                       </div>
-                    </div>
-                  </Link>
+                    </Link>
+                  </div>
                 );
               })}
             </div>

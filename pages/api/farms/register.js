@@ -4,9 +4,9 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: `Method ${req.method} not allowed` });
   }
 
-  const { farm_name, farmer_name, phone, email, location, total_area_acres, primary_crop } = req.body;
-  if (!farm_name || !farmer_name || !phone || !location || total_area_acres === undefined || !primary_crop) {
-    return res.status(400).json({ error: "Missing required fields: farm_name, farmer_name, phone, location, total_area_acres, primary_crop" });
+  const { farm_name, farmer_name, phone, email, location, total_area_acres } = req.body;
+  if (!farm_name || !farmer_name || !phone || !location || total_area_acres === undefined) {
+    return res.status(400).json({ error: "Missing required fields: farm_name, farmer_name, phone, location, total_area_acres" });
   }
 
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
@@ -23,7 +23,7 @@ export default async function handler(req, res) {
         email: email || null,
         location,
         total_area_acres: parseFloat(total_area_acres),
-        primary_crop,
+        primary_crop: "",
         created_at: new Date().toISOString()
       }
     });
@@ -38,7 +38,7 @@ export default async function handler(req, res) {
     if (email) formBody.push("email=" + encodeURIComponent(email));
     formBody.push("location=" + encodeURIComponent(location));
     formBody.push("total_area_acres=" + encodeURIComponent(total_area_acres));
-    formBody.push("primary_crop=" + encodeURIComponent(primary_crop));
+    formBody.push("primary_crop=");
     
     const requestBody = formBody.join("&");
 

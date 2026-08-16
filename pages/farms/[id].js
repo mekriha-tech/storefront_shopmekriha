@@ -367,7 +367,7 @@ export default function FarmPage() {
     <>
       <Head>
         <title>{farm?.name || "Partner Farm"} - Mekriha Partner Farm</title>
-        <meta name="description" content={`Explore ${farm?.name || ""} in ${farm?.district || ""}, Assam. Dynamic details about organic harvesting of ${farm?.harvest || ""}.`} />
+        <meta name="description" content={`Explore ${farm?.name || ""} in ${farm?.district || ""}, Assam. ${farm?.about || ""}`} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
@@ -458,6 +458,21 @@ export default function FarmPage() {
                 <span className="text-gray-400 block text-xs font-semibold uppercase tracking-wider mb-0.5">Coordinates</span>
                 <span className="font-semibold text-gray-800">{farm?.coordinates || "Not specified"}</span>
               </div>
+              {farm?.certifications?.length > 0 && (
+                <div className="col-span-2 pt-3 border-t border-gray-100">
+                  <span className="text-gray-400 block text-xs font-semibold uppercase tracking-wider mb-2">Certifications</span>
+                  <div className="flex flex-wrap gap-2">
+                    {farm.certifications.map((cert, idx) => (
+                      <span
+                        key={idx}
+                        className="text-[10px] font-bold border border-emerald-200 bg-emerald-50 text-emerald-800 px-2.5 py-1 rounded-full uppercase tracking-wider"
+                      >
+                        ✓ {cert}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Weather Widget */}
@@ -540,24 +555,6 @@ export default function FarmPage() {
               </p>
             </div>
 
-            {/* Harvest Display */}
-            <div className="border border-emerald-100 bg-emerald-50/50 p-6 rounded-2xl mb-6">
-              <h2 className="text-xs uppercase font-bold text-emerald-800 mb-2 tracking-wider">🌾 Active Organic Harvest</h2>
-              <p className="font-semibold text-lg text-emerald-900">
-                {farm?.harvest}
-              </p>
-              <div className="flex flex-wrap gap-2 mt-4">
-                {farm?.certifications?.map((cert, idx) => (
-                  <span
-                    key={idx}
-                    className="text-[10px] font-bold border border-emerald-200 bg-white text-emerald-800 px-2.5 py-1 rounded-full uppercase tracking-wider shadow-sm"
-                  >
-                    ✓ {cert}
-                  </span>
-                ))}
-              </div>
-            </div>
-
             {/* Book Farm Visit Button & Address */}
             <div className="border-t border-gray-100 pt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
@@ -579,7 +576,7 @@ export default function FarmPage() {
           {farmProducts.length > 0 && (
             <div className="col-span-12 border-t border-gray-150 pt-12 mt-8 text-left">
               <h2 className={`${calSansHeading.className} text-2xl font-bold text-gray-900 tracking-tight mb-8`}>
-                Crops Cultivated Here
+                Products From This Farm
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {farmProducts.map((product) => {
