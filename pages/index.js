@@ -54,7 +54,7 @@ const defaultTranslations = {
       description: "Experience the farm beyond the marketplace. Visit our partner farms, meet the people behind your food, and create unforgettable memories.",
       cta: "Visit Farm Now",
       videoPill: "🎥 Farm Stories",
-      videoTitle: "See It For Yourself"
+      videoTitle: "See Our Farms"
     },
     section5: {
       pill: "🛒 Organic Harvest",
@@ -145,9 +145,29 @@ const FARM_VIDEOS = [
     permalink: "https://www.instagram.com/reel/DaZjLLqhQci/",
   },
   {
+    id: "Db-5Ua-hZOy",
+    type: "instagram",
+    permalink: "https://www.instagram.com/reel/Db-5Ua-hZOy/?igsh=MWQ4cW11NXh4N2wxYQ==&igsi=MWQ4cW11NXh4N2wxYQ==",
+  },
+  {
+    id: "DbmzWmShfZS",
+    type: "instagram",
+    permalink: "https://www.instagram.com/reel/DbmzWmShfZS/?igsh=MTd1ZTllbzFmM3l5Zw==&igsi=MTd1ZTllbzFmM3l5Zw==",
+  },
+  {
+    id: "DbCruAhB0tT",
+    type: "instagram",
+    permalink: "https://www.instagram.com/reel/DbCruAhB0tT/?igsh=MWlkejZqcWFoNGNjdQ==&igsi=MWlkejZqcWFoNGNjdQ==",
+  },
+  {
+    id: "DaK5NkNB459",
+    type: "instagram",
+    permalink: "https://www.instagram.com/reel/DaK5NkNB459/?igsh=MW15MHkzYzk2Mm1veQ==&igsi=MW15MHkzYzk2Mm1veQ==",
+  },
+  {
     id: "6Arm5PgS01g",
     type: "youtube",
-    embedUrl: "https://www.youtube.com/embed/6Arm5PgS01g",
+    embedUrl: "https://www.youtube.com/embed/6Arm5PgS01g?controls=0&modestbranding=1&rel=0&playsinline=1",
   },
 ];
 
@@ -755,24 +775,27 @@ export default function Home() {
                 {FARM_VIDEOS.map((video) => (
                   <div
                     key={video.id}
-                    className="shrink-0 snap-start w-[300px] sm:w-[326px] rounded-2xl overflow-hidden border border-gray-200 shadow-xl"
+                    className="shrink-0 snap-start w-[300px] sm:w-[326px]"
                   >
                     {video.type === "youtube" ? (
-                      <iframe
-                        src={video.embedUrl}
-                        title="Farm video"
-                        className="w-full aspect-[9/16]"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowFullScreen
-                        loading="lazy"
-                      />
+                      <div className="farm-video-frame">
+                        <iframe
+                          src={video.embedUrl}
+                          title="Farm video"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                          allowFullScreen
+                          loading="lazy"
+                        />
+                      </div>
                     ) : (
-                      <blockquote
-                        className="instagram-media"
-                        data-instgrm-permalink={video.permalink}
-                        data-instgrm-version="14"
-                        style={{ margin: 0 }}
-                      />
+                      <div className="farm-video-frame farm-instagram-frame">
+                        <blockquote
+                          className="instagram-media"
+                          data-instgrm-permalink={video.permalink}
+                          data-instgrm-version="14"
+                          style={{ margin: 0 }}
+                        />
+                      </div>
                     )}
                   </div>
                 ))}
